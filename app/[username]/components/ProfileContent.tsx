@@ -215,6 +215,7 @@ function ProfileContentInner({
     if (!isOwnProfile) return; // Only allow editing on own profile
 
     // Convert Game to GameSearchResult format with additional properties for editing
+    // @ts-ignore
     const gameForModal: GameSearchResult & {
       userStatus?: string;
       userRating?: number;

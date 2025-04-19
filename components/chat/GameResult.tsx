@@ -159,7 +159,7 @@ export default function GameResult({ game, className }: GameResultProps) {
                 {game.userReview && (
                   <div className="mb-2 mt-1">
                     <p className="text-xs italic text-quokka-light/90 bg-quokka-purple/10 p-2 rounded-md border-l-2 border-quokka-purple/30">
-                      "{game.userReview}"
+                      &quot;{game.userReview}&quot;
                     </p>
                   </div>
                 )}

@@ -1,7 +1,3 @@
-import { Database } from "@/types_db";
-
-type Tables = Database["public"]["Tables"];
-
 export interface GameGenre {
   id: number;
   name: string;
@@ -51,7 +47,7 @@ export interface GameKeyword {
 }
 
 // Extended database type for games table with its relationships
-export type DBGame = Tables["games"]["Row"] & {
+export type DBGame = {
   id: number;
   name: string;
   slug: string;

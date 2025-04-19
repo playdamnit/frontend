@@ -96,7 +96,8 @@ export default function AIChatModal({ isOpen, onClose }: AIChatModalProps) {
                 How can I help you with games?
               </p>
               <p className="text-sm mt-2">
-                Try saying something like "I played Doom and gave it 9/10"
+                Try saying something like &quot;I played Doom and gave it
+                9/10&quot;
               </p>
             </div>
           ) : (

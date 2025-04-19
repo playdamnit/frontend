@@ -7,7 +7,7 @@ export default function UserNotFound() {
         User Not Found
       </h1>
       <p className="text-xl mb-8">
-        Sorry, we couldn't find the user you're looking for.
+        Sorry, we couldn&apos;t find the user you&apos;re looking for.
       </p>
       <Link
         href="/"

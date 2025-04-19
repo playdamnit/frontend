@@ -124,11 +124,11 @@ export function PasskeySettings({ user }: { user: any }) {
             <div className="text-center py-8 bg-quokka-darker/30 rounded-lg">
               <Key className="w-10 h-10 mx-auto mb-3 text-quokka-light/30" />
               <p className="text-quokka-light/60 mb-2">
-                You don't have any passkeys yet
+                You don&apos;t have any passkeys yet
               </p>
               <p className="text-sm text-quokka-light/40 max-w-md mx-auto">
                 Passkeys provide a secure, passwordless way to sign in to your
-                account using your device's authentication.
+                account using your device&apos;s authentication.
               </p>
             </div>
           )}
@@ -149,15 +149,15 @@ export function PasskeySettings({ user }: { user: any }) {
               Why use passkeys?
             </h4>
             <p className="text-sm text-quokka-light/60">
-              Passkeys can't be phished or stolen in data breaches, and work
-              across your devices with the same security.
+              Passkeys can&apos;t be phished or stolen in data breaches, and
+              work across your devices with the same security.
             </p>
           </div>
           <div className="bg-quokka-dark/40 p-4 rounded-lg">
             <h4 className="font-semibold text-quokka-light mb-2">How to use</h4>
             <p className="text-sm text-quokka-light/60">
-              Click "Register New Passkey" and follow the prompts on your device
-              to set up passwordless login.
+              Click &quot;Register New Passkey&quot; and follow the prompts on
+              your device to set up passwordless login.
             </p>
           </div>
         </div>

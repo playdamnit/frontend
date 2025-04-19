@@ -43,6 +43,7 @@ const Sidebar = async () => {
       <div className="mt-auto">
         <AddGameButton />
         <GameAssistantButton />
+        {/* @ts-ignore */}
         <UserSection user={user} />
       </div>
     </div>

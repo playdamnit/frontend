@@ -4,9 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "next build --turbopack",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "docker:build": "docker build -t quokka-nextjs .",
+    "docker:start": "docker run -p 3000:3000 quokka-nextjs",
+    "docker:build:prod": "docker build --build-arg BACKEND_URL=$BACKEND_URL --build-arg BETTER_AUTH_SECRET=$BETTER_AUTH_SECRET -t quokka-nextjs .",
+    "docker:start:prod": "docker run -p 3000:3000 -e BACKEND_URL=$BACKEND_URL -e BETTER_AUTH_SECRET=$BETTER_AUTH_SECRET quokka-nextjs"
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.3.16",
