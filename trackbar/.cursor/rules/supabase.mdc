@@ -1,0 +1,11 @@
+---
+description: Supabase Best practices
+globs: /**/*.(ts|tsx)
+---
+- Use Supabase SDK for data fetching and querying.
+- For data model creation, use Supabase's schema builder.
+- Implement proper error handling and fallback states.
+- Use Supabase's authentication and authorization features.
+- Follow best practices for data validation and sanitization.
+- Implement proper caching strategies for data fetching.
+- Always keep Supabase ts types in /database.types.ts file.

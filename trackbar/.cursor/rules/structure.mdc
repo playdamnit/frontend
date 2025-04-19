@@ -1,0 +1,247 @@
+---
+description: Folder structure of the project
+globs: 
+alwaysApply: false
+---
+
+# Project Structure
+```
+.
+├── .cursor
+│   └── rules
+│       ├── agent.mdc
+│       ├── nextjs.mdc
+│       ├── project.mdc
+│       ├── structure.mdc
+│       ├── supabase.mdc
+│       └── ui.mdc
+├── .env.example
+├── .eslintrc.json
+├── .gitignore
+├── .scripts
+│   └── update_structure.sh
+├── README.md
+├── adapters
+│   └── igdb
+│       └── index.ts
+├── app
+│   ├── (auth-pages)
+│   │   ├── auth
+│   │   │   ├── auth-form.tsx
+│   │   │   └── page.tsx
+│   │   ├── layout.tsx
+│   │   └── smtp-message.tsx
+│   ├── [username]
+│   │   ├── page.tsx
+│   │   └── profile-content.tsx
+│   ├── actions.ts
+│   ├── api
+│   │   ├── auth
+│   │   │   └── callback
+│   │   │       └── route.ts
+│   │   ├── game
+│   │   │   └── route.ts
+│   │   ├── games
+│   │   │   └── popularity
+│   │   │       └── route.ts
+│   │   ├── igdb
+│   │   │   ├── fetch
+│   │   │   │   └── route.ts
+│   │   │   ├── game_modes
+│   │   │   │   └── route.ts
+│   │   │   ├── game_types
+│   │   │   │   └── route.ts
+│   │   │   ├── games
+│   │   │   │   └── route.ts
+│   │   │   ├── genres
+│   │   │   │   └── route.ts
+│   │   │   ├── platforms
+│   │   │   │   └── route.ts
+│   │   │   ├── search
+│   │   │   │   ├── route.ts
+│   │   │   │   └── types.ts
+│   │   │   └── website_types
+│   │   │       └── route.ts
+│   │   ├── search
+│   │   │   └── route.ts
+│   │   └── user
+│   │       └── games
+│   │           ├── [id]
+│   │           │   └── route.ts
+│   │           ├── batch
+│   │           │   └── route.ts
+│   │           └── route.ts
+│   ├── error
+│   │   └── page.tsx
+│   ├── game
+│   │   └── [id]
+│   │       └── page.tsx
+│   ├── globals.css
+│   ├── helpers
+│   │   ├── getUserGameById.ts
+│   │   ├── getUserGames.ts
+│   │   └── postUserGame.ts
+│   ├── layout.tsx
+│   ├── not-found.tsx
+│   ├── page.tsx
+│   ├── protected
+│   │   └── reset-password
+│   │       └── page.tsx
+│   └── settings
+│       ├── page.tsx
+│       └── user-settings-form.tsx
+├── components
+│   ├── AddGameModal.tsx
+│   ├── AnnualStats.tsx
+│   ├── GameCarousel.tsx
+│   ├── GameList.tsx
+│   ├── Sidebar.tsx
+│   ├── SidebarWrapper.tsx
+│   ├── SignOutButton.tsx
+│   ├── env-error-message.tsx
+│   ├── form-message.tsx
+│   ├── game
+│   │   ├── screenshots.tsx
+│   │   └── video.tsx
+│   ├── main
+│   │   ├── banner.tsx
+│   │   ├── footer.tsx
+│   │   ├── game-card.tsx
+│   │   ├── game-slider.tsx
+│   │   ├── header.tsx
+│   │   ├── product-features.tsx
+│   │   └── skeleton-card.tsx
+│   ├── mode-toggle.tsx
+│   ├── search
+│   │   └── search-modal.tsx
+│   ├── submit-button.tsx
+│   ├── theme-provider.tsx
+│   └── ui
+│       ├── accordion.tsx
+│       ├── alert-dialog.tsx
+│       ├── alert.tsx
+│       ├── aspect-ratio.tsx
+│       ├── avatar.tsx
+│       ├── badge.tsx
+│       ├── breadcrumb.tsx
+│       ├── button.tsx
+│       ├── calendar.tsx
+│       ├── card.tsx
+│       ├── carousel.tsx
+│       ├── chart.tsx
+│       ├── checkbox.tsx
+│       ├── collapsible.tsx
+│       ├── command.tsx
+│       ├── context-menu.tsx
+│       ├── dialog.tsx
+│       ├── drawer.tsx
+│       ├── dropdown-menu.tsx
+│       ├── form.tsx
+│       ├── hover-card.tsx
+│       ├── input-otp.tsx
+│       ├── input.tsx
+│       ├── label.tsx
+│       ├── loader.tsx
+│       ├── logo.tsx
+│       ├── menubar.tsx
+│       ├── modal.tsx
+│       ├── navigation-menu.tsx
+│       ├── pagination.tsx
+│       ├── popover.tsx
+│       ├── portal.tsx
+│       ├── progress.tsx
+│       ├── radio-group.tsx
+│       ├── resizable.tsx
+│       ├── scroll-area.tsx
+│       ├── select.tsx
+│       ├── separator.tsx
+│       ├── sheet.tsx
+│       ├── sidebar.tsx
+│       ├── skeleton.tsx
+│       ├── slider.tsx
+│       ├── sonner.tsx
+│       ├── switch.tsx
+│       ├── table.tsx
+│       ├── tabs.tsx
+│       ├── textarea.tsx
+│       ├── toast.tsx
+│       ├── toaster.tsx
+│       ├── toggle-group.tsx
+│       ├── toggle.tsx
+│       ├── tooltip.tsx
+│       ├── use-mobile.tsx
+│       └── use-toast.ts
+├── components.json
+├── contexts
+│   └── GameContext.tsx
+├── diagram-architecture.md
+├── diagram-flow.md
+├── hooks
+│   ├── use-auth.ts
+│   ├── use-mobile.tsx
+│   ├── use-toast.ts
+│   ├── useGameSearch.ts
+│   ├── useTrackGamePopularity.ts
+│   └── useUserGames.ts
+├── lib
+│   ├── adapters
+│   │   └── gameAdapter.ts
+│   ├── auth
+│   │   ├── auth-adapter.ts
+│   │   └── hooks.ts
+│   └── utils.ts
+├── middleware.ts
+├── next.config.mjs
+├── package-lock.json
+├── package.json
+├── pnpm-lock.yaml
+├── postcss.config.mjs
+├── providers
+│   └── QueryProvider.tsx
+├── public
+│   ├── placeholder-logo.png
+│   ├── placeholder-logo.svg
+│   ├── placeholder-user.jpg
+│   ├── placeholder.jpg
+│   └── placeholder.svg
+├── schema.sql
+├── styles
+│   └── globals.css
+├── supabase
+│   ├── .branches
+│   │   └── _current_branch
+│   ├── config.toml
+│   ├── migrations
+│   │   ├── 20250223222930_init.sql
+│   │   ├── 20250223222931_create_storage_buckets.sql
+│   │   ├── 20250223222932_add_user_lookup.sql
+│   │   ├── 20250223222933_add_pgmq.sql
+│   │   └── 20250223223000_add_cron_job.sql
+│   └── seed.sql
+├── tailwind.config.ts
+├── tsconfig.json
+├── types
+│   └── game.ts
+├── types_db.ts
+└── utils
+    ├── date.ts
+    ├── igdb
+    │   └── token.ts
+    ├── popularity.ts
+    ├── redis.ts
+    ├── search
+    │   ├── igdb.ts
+    │   ├── postgres.ts
+    │   ├── store.ts
+    │   └── utils.ts
+    ├── supabase
+    │   ├── client.ts
+    │   ├── middleware.ts
+    │   ├── server-auth.ts
+    │   └── server.ts
+    ├── types
+    │   └── game.ts
+    └── utils.ts
+
+59 directories, 177 files
+```

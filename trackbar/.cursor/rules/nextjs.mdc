@@ -1,0 +1,15 @@
+---
+description: Best Practices for Next.js with App Router
+globs: /**/*.(ts|tsx)
+alwaysApply: true
+---
+- Always use React Server Components (RSC) and latest Next.js features. 
+- Use client components sparingly, only when interactivity is required.
+- Take advantage of Next.js file-based routing system for simplicity.
+- Centralize shared layouts in `layout.tsx` for consistency across pages.
+- Add `loading.tsx` to handle loading states for better UX (only if the component is client-side).
+- Implement custom error pages with `error.tsx` to handle errors gracefully.
+- Use API route handlers to manage backend logic within the app structure.
+- Optimize server-side rendering (SSR) and static site generation (SSG) for faster loading times.
+- Use Tanstack query for fetching endpoints from API.
+- All API routes are located at app/api folder.
