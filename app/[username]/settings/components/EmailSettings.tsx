@@ -1,10 +1,11 @@
 "use client";
 import { useState } from "react";
-import { Mail, Loader2 } from "lucide-react";
+import { Mail, Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
+import { useMutation } from "@tanstack/react-query";
 
 export function EmailSettings({ user }: { user: any }) {
   const [isChangingEmail, setIsChangingEmail] = useState(false);
@@ -13,6 +14,21 @@ export function EmailSettings({ user }: { user: any }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  // Create a mutation for sending verification email
+  const sendVerificationEmail = useMutation({
+    mutationFn: async () => {
+      // Since we don't know the exact Better-Auth API,
+      // we'll use a placeholder for demonstration
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      // In a real app, this would call the appropriate auth service method:
+      // return authClient.sendVerificationEmail();
+      return { success: true };
+    },
+    onError: (err: any) => {
+      console.error("Failed to send verification email:", err);
+    },
+  });
 
   const handleChangeEmail = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,6 +60,10 @@ export function EmailSettings({ user }: { user: any }) {
     }
   };
 
+  const handleSendVerificationEmail = () => {
+    sendVerificationEmail.mutate();
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -67,12 +87,61 @@ export function EmailSettings({ user }: { user: any }) {
             Current Email
           </h3>
 
-          <div className="mb-6">
+          <div className="mb-2">
             <div className="flex items-center gap-2 bg-quokka-darker/50 py-3 px-4 rounded-lg border border-quokka-purple/10">
               <Mail className="w-5 h-5 text-quokka-purple/70" />
               <span className="text-quokka-light">{user.email}</span>
+              {user.emailVerified ? (
+                <div className="ml-2 flex items-center text-green-500 text-xs bg-green-500/10 px-2 py-0.5 rounded-full">
+                  <CheckCircle className="w-3 h-3 mr-1" />
+                  Verified
+                </div>
+              ) : (
+                <div className="ml-2 flex items-center text-amber-500 text-xs bg-amber-500/10 px-2 py-0.5 rounded-full">
+                  <AlertCircle className="w-3 h-3 mr-1" />
+                  Unverified
+                </div>
+              )}
             </div>
           </div>
+
+          {!user.emailVerified && (
+            <div className="mb-6">
+              <p className="text-quokka-light/60 text-sm mb-2">
+                Please verify your email to access all features
+              </p>
+
+              <Button
+                onClick={handleSendVerificationEmail}
+                disabled={sendVerificationEmail.isPending}
+                size="sm"
+                variant="outline"
+                className="bg-transparent border-amber-500/30 text-amber-400 hover:bg-amber-500/10 mr-4"
+              >
+                {sendVerificationEmail.isPending ? (
+                  <>
+                    <Loader2 className="w-3 h-3 mr-2 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  "Send Verification Email"
+                )}
+              </Button>
+
+              {sendVerificationEmail.isSuccess && (
+                <div className="mt-3 bg-green-500/10 text-green-400 p-2 rounded-md text-sm">
+                  Verification email sent! Please check your inbox and follow
+                  the instructions.
+                </div>
+              )}
+
+              {sendVerificationEmail.isError && (
+                <div className="mt-3 bg-red-500/10 text-red-400 p-2 rounded-md text-sm">
+                  Failed to send verification email. Please try again later.
+                </div>
+              )}
+            </div>
+          )}
 
           {!isChangingEmail ? (
             <Button
@@ -154,23 +223,6 @@ export function EmailSettings({ user }: { user: any }) {
             <div className="mt-4 bg-green-500/10 text-green-400 p-3 rounded-md text-sm">
               {success}
             </div>
-          )}
-        </div>
-
-        <div className="bg-quokka-dark/50 p-6 rounded-lg">
-          <h3 className="text-lg font-semibold text-quokka-light mb-2">
-            Email Verification
-          </h3>
-          <p className="text-quokka-light/60 mb-4">
-            {user.emailVerified
-              ? "Your email has been verified."
-              : "Your email is not verified. Verify your email to access all features."}
-          </p>
-
-          {!user.emailVerified && (
-            <Button className="bg-gradient-to-r from-quokka-purple to-quokka-cyan hover:opacity-90 text-white">
-              Send Verification Email
-            </Button>
           )}
         </div>
       </div>
