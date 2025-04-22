@@ -132,7 +132,7 @@ function ProfileContentInner({
       name: "All",
       count: getStatusCount("All"),
       icon: "🎮",
-      color: "quokka-cyan",
+      color: "playdamnit-cyan",
     },
     {
       name: "Finished",
@@ -283,7 +283,9 @@ function ProfileContentInner({
       <div className="flex-1 p-4 md:p-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center py-12">
-            <div className="text-quokka-light/40 mb-2">Loading games...</div>
+            <div className="text-playdamnit-light/40 mb-2">
+              Loading games...
+            </div>
           </div>
         </div>
       </div>
@@ -295,9 +297,9 @@ function ProfileContentInner({
   //   return (
   //     <div className="flex-1 p-4 md:p-8">
   //       <div className="max-w-6xl mx-auto">
-  //         <div className="text-center py-12">
+  //         <div className="text-center py-playdamnit-
   //           <div className="text-red-500 mb-2">Error loading games</div>
-  //           <div className="text-sm text-quokka-light/30">
+  //           <div className="text-sm text-playdamnit-light/30">
   //             Please try again later
   //           </div>
   //         </div>

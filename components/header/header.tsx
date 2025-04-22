@@ -10,7 +10,7 @@ export default async function Header() {
   return (
     <header className="w-full">
       {/* Accent line */}
-      <div className="h-2 w-full bg-gradient-to-r from-quokka-purple via-quokka-cyan to-quokka-purple"></div>
+      <div className="h-2 w-full bg-gradient-to-r from-playdamnit-purple via-playdamnit-cyan to-playdamnit-purple"></div>
 
       {/* Main header content */}
       <div className="bg-black shadow-lg">
@@ -22,7 +22,7 @@ export default async function Header() {
               className="relative z-10 flex items-center gap-2 group"
             >
               {/* <Logo size={40} /> */}
-              <img src="/Group 3.svg" alt="PlayDamnIt Logo" className="w-32" />
+              <img src="/logo.svg" alt="PlayDamnIt Logo" className="w-32" />
               {/* <span className="text-2xl font-bold text-white">PlayDamnIt</span> */}
             </Link>
 

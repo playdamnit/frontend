@@ -33,8 +33,8 @@ export default function GameResultsList({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="bg-quokka-dark/50 border border-quokka-purple/20 rounded-lg overflow-hidden p-3">
-        <h3 className="text-sm font-medium text-quokka-light/70 mb-2">
+      <div className="bg-playdamnit-dark/50 border border-playdamnit-purple/20 rounded-lg overflow-hidden p-3">
+        <h3 className="text-sm font-medium text-playdamnit-light/70 mb-2">
           Multiple games found. Select the one you meant:
         </h3>
         <div className="grid grid-cols-1 gap-2 max-h-[300px] overflow-y-auto pr-1">
@@ -51,8 +51,8 @@ export default function GameResultsList({
                 className={cn(
                   "flex items-center gap-3 p-2 rounded-lg border transition-all duration-200",
                   selectedGameId === game.id
-                    ? "border-quokka-cyan bg-quokka-purple/10"
-                    : "border-quokka-purple/10 hover:bg-quokka-purple/5"
+                    ? "border-playdamnit-cyan bg-playdamnit-purple/10"
+                    : "border-playdamnit-purple/10 hover:bg-playdamnit-purple/5"
                 )}
               >
                 {/* Game cover */}
@@ -67,7 +67,7 @@ export default function GameResultsList({
                 {/* Game details */}
                 <div className="flex-1 min-w-0">
                   <h4 className="font-medium text-white">{game.name}</h4>
-                  <p className="text-xs text-quokka-light/70">
+                  <p className="text-xs text-playdamnit-light/70">
                     {game.firstReleaseDate
                       ? new Date(game.firstReleaseDate * 1000).getFullYear()
                       : "Unknown year"}
@@ -83,8 +83,8 @@ export default function GameResultsList({
                   className={cn(
                     "w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300",
                     selectedGameId === game.id
-                      ? "bg-quokka-cyan text-quokka-dark"
-                      : "bg-quokka-purple/30 text-quokka-cyan hover:bg-quokka-purple hover:scale-110"
+                      ? "bg-playdamnit-cyan text-playdamnit-dark"
+                      : "bg-playdamnit-purple/30 text-playdamnit-cyan hover:bg-playdamnit-purple hover:scale-110"
                   )}
                   aria-label={`Select ${game.name}`}
                 >

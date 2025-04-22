@@ -26,9 +26,9 @@ export const UserSection = ({ user }: UserSectionProps) => {
   if (!user) return null;
 
   return (
-    <div className="p-3 border-t border-quokka-darker">
-      <div className="flex items-center gap-3 p-2 rounded-lg bg-quokka-dark/30 hover:bg-quokka-dark/50 transition-colors">
-        <div className="w-10 h-10 rounded-lg bg-quokka-purple/20 flex items-center justify-center text-quokka-cyan font-bold">
+    <div className="p-3 border-t border-playdamnit-darker">
+      <div className="flex items-center gap-3 p-2 rounded-lg bg-playdamnit-dark/30 hover:bg-playdamnit-dark/50 transition-colors">
+        <div className="w-10 h-10 rounded-lg bg-playdamnit-purple/20 flex items-center justify-center text-playdamnit-cyan font-bold">
           {user.image ? (
             <img
               src={
@@ -46,10 +46,10 @@ export const UserSection = ({ user }: UserSectionProps) => {
           )}
         </div>
         <div className="hidden md:block overflow-hidden">
-          <div className="text-sm font-medium text-quokka-light truncate">
+          <div className="text-sm font-medium text-playdamnit-light truncate">
             {user.username || user.name || user.email}
           </div>
-          <div className="text-xs text-quokka-light/40 truncate">
+          <div className="text-xs text-playdamnit-light/40 truncate">
             {user.email}
           </div>
         </div>
@@ -60,7 +60,7 @@ export const UserSection = ({ user }: UserSectionProps) => {
         onClick={handleSignOut}
         disabled={signOut.isPending}
         variant="ghost"
-        className="w-full mt-2 text-quokka-light/60 hover:text-quokka-light hover:bg-quokka-purple/10 flex items-center gap-2 py-2"
+        className="w-full mt-2 text-playdamnit-light/60 hover:text-playdamnit-light hover:bg-playdamnit-purple/10 flex items-center gap-2 py-2"
       >
         <LogOut className="w-4 h-4" />
         <span className="hidden md:block">
@@ -73,9 +73,9 @@ export const UserSection = ({ user }: UserSectionProps) => {
 
 export const AddGameButton = () => {
   return (
-    <div className="p-3 border-t border-quokka-darker">
+    <div className="p-3 border-t border-playdamnit-darker">
       <Button
-        className="w-full bg-gradient-to-r from-quokka-purple to-quokka-cyan hover:opacity-90 transition-opacity text-white rounded-lg flex items-center justify-center gap-2 py-2.5"
+        className="w-full bg-gradient-to-r from-playdamnit-purple to-playdamnit-cyan hover:opacity-90 transition-opacity text-white rounded-lg flex items-center justify-center gap-2 py-2.5"
         // onClick={onAddGameClick}
       >
         <Plus className="w-5 h-5" />
@@ -89,7 +89,7 @@ export const GameAssistantButton = () => {
   return (
     <div className="p-3">
       <AIChatButton>
-        <Button className="w-full bg-quokka-dark hover:bg-quokka-dark/80 text-quokka-cyan border border-quokka-cyan/30 transition-colors rounded-lg flex items-center justify-center gap-2 py-2.5">
+        <Button className="w-full bg-playdamnit-dark hover:bg-playdamnit-dark/80 text-playdamnit-cyan border border-playdamnit-cyan/30 transition-colors rounded-lg flex items-center justify-center gap-2 py-2.5">
           <Bot className="w-5 h-5" />
           <span className="hidden md:block">Game Assistant</span>
         </Button>

@@ -58,41 +58,41 @@ export function AccountSettings({ user }: { user: any }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="bg-quokka-dark/30 border border-quokka-purple/10 rounded-xl p-6 md:p-8 shadow-lg hover:shadow-quokka-purple/5 hover:border-quokka-purple/30 transition-all"
+      className="bg-playdamnit-dark/30 border border-playdamnit-purple/10 rounded-xl p-6 md:p-8 shadow-lg hover:shadow-playdamnit-purple/5 hover:border-playdamnit-purple/30 transition-all"
     >
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-quokka-light mb-2 flex items-center">
-          <span className="inline-block w-1 h-6 bg-gradient-to-b from-quokka-purple to-quokka-cyan rounded-full mr-3"></span>
+        <h2 className="text-2xl font-bold text-playdamnit-light mb-2 flex items-center">
+          <span className="inline-block w-1 h-6 bg-gradient-to-b from-playdamnit-purple to-playdamnit-cyan rounded-full mr-3"></span>
           Account Management
         </h2>
-        <p className="text-quokka-light/60">
+        <p className="text-playdamnit-light/60">
           Manage your account settings and delete your account
         </p>
       </div>
 
       <div className="space-y-8">
-        <div className="bg-quokka-dark/50 p-6 rounded-lg">
-          <h3 className="text-lg font-semibold text-quokka-light mb-4">
+        <div className="bg-playdamnit-dark/50 p-6 rounded-lg">
+          <h3 className="text-lg font-semibold text-playdamnit-light mb-4">
             Sign Out
           </h3>
-          <p className="text-quokka-light/60 mb-4">
+          <p className="text-playdamnit-light/60 mb-4">
             Sign out from your current session on this device
           </p>
 
           <Button
             onClick={handleSignOut}
-            className="bg-quokka-dark border border-quokka-purple/20 text-quokka-light hover:bg-quokka-dark/80"
+            className="bg-playdamnit-dark border border-playdamnit-purple/20 text-playdamnit-light hover:bg-playdamnit-dark/80"
           >
             <LogOut className="w-4 h-4 mr-2" />
             Sign Out
           </Button>
         </div>
 
-        <div className="bg-quokka-dark/50 p-6 rounded-lg border-red-500/10">
+        <div className="bg-playdamnit-dark/50 p-6 rounded-lg border-red-500/10">
           <h3 className="text-lg font-semibold text-red-400 mb-2">
             Danger Zone
           </h3>
-          <p className="text-quokka-light/60 mb-6">
+          <p className="text-playdamnit-light/60 mb-6">
             Once you delete your account, there is no going back. This action
             permanently deletes your account, profile, and all associated data.
           </p>
@@ -109,15 +109,15 @@ export function AccountSettings({ user }: { user: any }) {
       </div>
 
       <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
-        <AlertDialogContent className="bg-quokka-darker border-quokka-purple/20 text-quokka-light">
+        <AlertDialogContent className="bg-playdamnit-darker border-playdamnit-purple/20 text-playdamnit-light">
           <AlertDialogHeader>
             <div className="mx-auto bg-red-500/10 p-3 rounded-full w-16 h-16 flex items-center justify-center mb-2">
               <AlertTriangle className="h-8 w-8 text-red-400" />
             </div>
-            <AlertDialogTitle className="text-xl text-quokka-light">
+            <AlertDialogTitle className="text-xl text-playdamnit-light">
               Delete Account
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-quokka-light/70">
+            <AlertDialogDescription className="text-playdamnit-light/70">
               This action cannot be undone. This will permanently delete your
               account and remove all your data from our servers.
             </AlertDialogDescription>
@@ -127,7 +127,7 @@ export function AccountSettings({ user }: { user: any }) {
             <div className="space-y-2">
               <Label
                 htmlFor="confirm-password"
-                className="text-quokka-light/90"
+                className="text-playdamnit-light/90"
               >
                 Enter your password to confirm
               </Label>
@@ -137,7 +137,7 @@ export function AccountSettings({ user }: { user: any }) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Your current password"
-                className="bg-quokka-dark/50 border-quokka-purple/20 focus-visible:ring-quokka-purple/30"
+                className="bg-playdamnit-dark/50 border-playdamnit-purple/20 focus-visible:ring-playdamnit-purple/30"
               />
             </div>
 
@@ -149,7 +149,7 @@ export function AccountSettings({ user }: { user: any }) {
           </div>
 
           <AlertDialogFooter className="mt-4">
-            <AlertDialogCancel className="bg-quokka-dark/50 border-quokka-purple/20 text-quokka-light hover:bg-quokka-dark hover:text-quokka-light/90">
+            <AlertDialogCancel className="bg-playdamnit-dark/50 border-playdamnit-purple/20 text-playdamnit-light hover:bg-playdamnit-dark hover:text-playdamnit-light/90">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction

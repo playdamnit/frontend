@@ -1,5 +1,5 @@
 {
-  "name": "quokka-nextjs",
+  "name": "playdamnit-nextjs",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,10 +7,10 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "next lint",
-    "docker:build": "docker build -t quokka-nextjs .",
-    "docker:start": "docker run -p 3000:3000 quokka-nextjs",
-    "docker:build:prod": "docker build --build-arg BACKEND_URL=$BACKEND_URL --build-arg BETTER_AUTH_SECRET=$BETTER_AUTH_SECRET -t quokka-nextjs .",
-    "docker:start:prod": "docker run -p 3000:3000 -e BACKEND_URL=$BACKEND_URL -e BETTER_AUTH_SECRET=$BETTER_AUTH_SECRET quokka-nextjs"
+    "docker:build": "docker build -t playdamnit-nextjs .",
+    "docker:start": "docker run -p 3000:3000 playdamnit-nextjs",
+    "docker:build:prod": "docker build --build-arg BACKEND_URL=$BACKEND_URL --build-arg BETTER_AUTH_SECRET=$BETTER_AUTH_SECRET -t playdamnit-nextjs .",
+    "docker:start:prod": "docker run -p 3000:3000 -e BACKEND_URL=$BACKEND_URL -e BETTER_AUTH_SECRET=$BETTER_AUTH_SECRET playdamnit-nextjs"
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.3.16",

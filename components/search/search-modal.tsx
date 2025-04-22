@@ -20,9 +20,9 @@ import { Logo } from "../ui/logo";
 // Custom scrollbar styles
 const scrollbarStyles = `
   scrollbar-thin
-  scrollbar-thumb-quokka-purple/40
-  scrollbar-track-quokka-dark
-  hover:scrollbar-thumb-quokka-purple/60
+  scrollbar-thumb-playdamnit-purple/40
+  scrollbar-track-playdamnit-dark
+  hover:scrollbar-thumb-playdamnit-purple/60
   scrollbar-thumb-rounded-full
   scrollbar-track-rounded-full
   overflow-y-auto
@@ -73,7 +73,7 @@ export default function SearchModal({
 
   // Custom gamepad icon for platforms
   const PlatformIcon = () => (
-    <Gamepad size={14} className="text-quokka-cyan mr-1" />
+    <Gamepad size={14} className="text-playdamnit-cyan mr-1" />
   );
 
   return (
@@ -88,9 +88,9 @@ export default function SearchModal({
         }
       }}
     >
-      <DialogContent className="bg-quokka-darker border border-quokka-purple/20 text-white max-w-2xl p-0 overflow-hidden">
+      <DialogContent className="bg-playdamnit-darker border border-playdamnit-purple/20 text-white max-w-2xl p-0 overflow-hidden">
         {/* Gradient accent line at top */}
-        <div className="h-1 w-full bg-gradient-to-r from-quokka-purple via-quokka-cyan to-quokka-purple"></div>
+        <div className="h-1 w-full bg-gradient-to-r from-playdamnit-purple via-playdamnit-cyan to-playdamnit-purple"></div>
 
         {showSearchContent ? (
           <div className="p-6 space-y-6">
@@ -106,7 +106,7 @@ export default function SearchModal({
                 placeholder="Search games..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-lg border border-quokka-purple/20 bg-quokka-dark py-4 pl-12 pr-4 text-white placeholder-gray-400 focus:border-quokka-purple focus:outline-none focus:ring-1 focus:ring-quokka-purple text-lg"
+                className="w-full rounded-lg border border-playdamnit-purple/20 bg-playdamnit-dark py-4 pl-12 pr-4 text-white placeholder-gray-400 focus:border-playdamnit-purple focus:outline-none focus:ring-1 focus:ring-playdamnit-purple text-lg"
                 autoFocus
               />
             </div>
@@ -126,58 +126,58 @@ export default function SearchModal({
                   {[1, 2, 3].map((i) => (
                     <div
                       key={i}
-                      className="relative overflow-hidden rounded-xl bg-quokka-dark border border-quokka-purple/10 animate-pulse"
+                      className="relative overflow-hidden rounded-xl bg-playdamnit-dark border border-playdamnit-purple/10 animate-pulse"
                     >
                       <div className="flex">
                         {/* Skeleton for game cover */}
-                        <div className="relative w-[100px] h-[140px] flex-shrink-0 bg-quokka-purple/5 overflow-hidden">
+                        <div className="relative w-[100px] h-[140px] flex-shrink-0 bg-playdamnit-purple/5 overflow-hidden">
                           {/* Shimmer effect */}
-                          <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-quokka-purple/10 to-transparent animate-shimmer"></div>
+                          <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
 
                           {/* Rating skeleton */}
-                          <div className="absolute bottom-2 left-2 bg-quokka-darker/50 rounded-full w-12 h-5"></div>
+                          <div className="absolute bottom-2 left-2 bg-playdamnit-darker/50 rounded-full w-12 h-5"></div>
                         </div>
 
                         {/* Skeleton for game details */}
                         <div className="flex-1 p-4 flex flex-col justify-between">
                           <div>
-                            <div className="relative h-6 bg-quokka-purple/5 rounded w-3/4 mb-4 overflow-hidden">
-                              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-quokka-purple/10 to-transparent animate-shimmer"></div>
+                            <div className="relative h-6 bg-playdamnit-purple/5 rounded w-3/4 mb-4 overflow-hidden">
+                              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
                             </div>
-                            <div className="relative h-4 bg-quokka-purple/5 rounded w-1/2 mb-2 overflow-hidden">
-                              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-quokka-purple/10 to-transparent animate-shimmer"></div>
+                            <div className="relative h-4 bg-playdamnit-purple/5 rounded w-1/2 mb-2 overflow-hidden">
+                              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
                             </div>
                             <div className="flex gap-2 mt-3">
-                              <div className="relative h-6 bg-quokka-purple/5 rounded-full w-16 overflow-hidden">
-                                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-quokka-purple/10 to-transparent animate-shimmer"></div>
+                              <div className="relative h-6 bg-playdamnit-purple/5 rounded-full w-16 overflow-hidden">
+                                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
                               </div>
-                              <div className="relative h-6 bg-quokka-purple/5 rounded-full w-16 overflow-hidden">
-                                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-quokka-purple/10 to-transparent animate-shimmer"></div>
+                              <div className="relative h-6 bg-playdamnit-purple/5 rounded-full w-16 overflow-hidden">
+                                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
                               </div>
-                              <div className="relative h-6 bg-quokka-purple/5 rounded-full w-10 overflow-hidden">
-                                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-quokka-purple/10 to-transparent animate-shimmer"></div>
+                              <div className="relative h-6 bg-playdamnit-purple/5 rounded-full w-10 overflow-hidden">
+                                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
                               </div>
                             </div>
                           </div>
 
                           <div className="flex gap-4 mt-4">
-                            <div className="relative h-4 bg-quokka-purple/5 rounded w-20 flex items-center overflow-hidden">
-                              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-quokka-purple/10 to-transparent animate-shimmer"></div>
-                              <div className="w-3 h-3 mr-1 bg-quokka-purple/10 rounded-full z-10"></div>
-                              <div className="flex-1 bg-quokka-purple/5 h-3 rounded z-10"></div>
+                            <div className="relative h-4 bg-playdamnit-purple/5 rounded w-20 flex items-center overflow-hidden">
+                              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
+                              <div className="w-3 h-3 mr-1 bg-playdamnit-purple/10 rounded-full z-10"></div>
+                              <div className="flex-1 bg-playdamnit-purple/5 h-3 rounded z-10"></div>
                             </div>
-                            <div className="relative h-4 bg-quokka-purple/5 rounded w-32 flex items-center overflow-hidden">
-                              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-quokka-purple/10 to-transparent animate-shimmer"></div>
-                              <div className="w-3 h-3 mr-1 bg-quokka-purple/10 rounded-full z-10"></div>
-                              <div className="flex-1 bg-quokka-purple/5 h-3 rounded z-10"></div>
+                            <div className="relative h-4 bg-playdamnit-purple/5 rounded w-32 flex items-center overflow-hidden">
+                              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
+                              <div className="w-3 h-3 mr-1 bg-playdamnit-purple/10 rounded-full z-10"></div>
+                              <div className="flex-1 bg-playdamnit-purple/5 h-3 rounded z-10"></div>
                             </div>
                           </div>
                         </div>
 
                         {/* Add button skeleton */}
                         <div className="absolute right-4 top-4">
-                          <div className="relative w-8 h-8 rounded-full bg-quokka-purple/10 overflow-hidden">
-                            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-quokka-purple/10 to-transparent animate-shimmer"></div>
+                          <div className="relative w-8 h-8 rounded-full bg-playdamnit-purple/10 overflow-hidden">
+                            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
                           </div>
                         </div>
                       </div>
@@ -189,21 +189,21 @@ export default function SearchModal({
                   {searchResults.results.map((game) => (
                     <div
                       key={game.id}
-                      className="group relative overflow-hidden rounded-xl bg-quokka-dark border border-quokka-purple/20 hover:border-quokka-purple/50 transition-all duration-300 cursor-pointer"
+                      className="group relative overflow-hidden rounded-xl bg-playdamnit-dark border border-playdamnit-purple/20 hover:border-playdamnit-purple/50 transition-all duration-300 cursor-pointer"
                       onClick={() => handleGameSelect(game)}
                     >
                       <div className="flex">
                         {/* Game cover with gradient overlay */}
                         <div className="relative w-[100px] h-[140px] flex-shrink-0">
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-quokka-dark/30 z-10" />
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-playdamnit-dark/30 z-10" />
                           <img
                             src={game.cover?.url || "/placeholder.svg"}
                             alt={game.name}
                             className="h-full w-full object-cover"
                           />
                           {game.totalRating && (
-                            <div className="absolute bottom-2 left-2 bg-quokka-darker/80 rounded-full px-2 py-1 flex items-center z-20">
-                              <Star className="h-3 w-3 text-quokka-cyan mr-1" />
+                            <div className="absolute bottom-2 left-2 bg-playdamnit-darker/80 rounded-full px-2 py-1 flex items-center z-20">
+                              <Star className="h-3 w-3 text-playdamnit-cyan mr-1" />
                               <span className="text-xs font-medium">
                                 {(game.totalRating / 10).toFixed(1)}
                               </span>
@@ -214,7 +214,7 @@ export default function SearchModal({
                         {/* Game details */}
                         <div className="flex-1 p-4 flex flex-col justify-between">
                           <div>
-                            <h3 className="text-xl font-bold text-white mb-2 group-hover:text-quokka-cyan transition-colors line-clamp-2 pr-10">
+                            <h3 className="text-xl font-bold text-white mb-2 group-hover:text-playdamnit-cyan transition-colors line-clamp-2 pr-10">
                               {game.name}
                             </h3>
 
@@ -225,13 +225,13 @@ export default function SearchModal({
                                   {game.genres.slice(0, 2).map((genre) => (
                                     <span
                                       key={genre.id}
-                                      className="bg-quokka-purple/20 rounded-full px-3 py-1 text-xs text-quokka-light/70"
+                                      className="bg-playdamnit-purple/20 rounded-full px-3 py-1 text-xs text-playdamnit-light/70"
                                     >
                                       {genre.name}
                                     </span>
                                   ))}
                                   {game.genres.length > 2 && (
-                                    <span className="bg-quokka-purple/20 rounded-full px-3 py-1 text-xs text-quokka-light/70">
+                                    <span className="bg-playdamnit-purple/20 rounded-full px-3 py-1 text-xs text-playdamnit-light/70">
                                       +{game.genres.length - 2}
                                     </span>
                                   )}
@@ -240,10 +240,10 @@ export default function SearchModal({
                             </div>
                           </div>
 
-                          <div className="flex flex-wrap items-center mt-3 text-sm text-quokka-light/70 gap-4">
+                          <div className="flex flex-wrap items-center mt-3 text-sm text-playdamnit-light/70 gap-4">
                             {game.firstReleaseDate && (
                               <div className="flex items-center">
-                                <Calendar className="h-3.5 w-3.5 mr-1 text-quokka-cyan" />
+                                <Calendar className="h-3.5 w-3.5 mr-1 text-playdamnit-cyan" />
                                 <span>
                                   {new Date(
                                     game.firstReleaseDate * 1000
@@ -277,14 +277,14 @@ export default function SearchModal({
                             handleGameSelect(game);
                           }}
                         >
-                          <div className="w-8 h-8 rounded-full bg-quokka-purple/30 flex items-center justify-center hover:bg-quokka-purple hover:scale-110 transition-all duration-300">
-                            <Plus className="h-5 w-5 text-quokka-cyan" />
+                          <div className="w-8 h-8 rounded-full bg-playdamnit-purple/30 flex items-center justify-center hover:bg-playdamnit-purple hover:scale-110 transition-all duration-300">
+                            <Plus className="h-5 w-5 text-playdamnit-cyan" />
                           </div>
                         </div>
                       </div>
 
                       {/* Hover effect - gradient line at bottom */}
-                      <div className="h-1 w-0 group-hover:w-full bg-gradient-to-r from-quokka-purple via-quokka-cyan to-quokka-purple absolute bottom-0 left-0 transition-all duration-500"></div>
+                      <div className="h-1 w-0 group-hover:w-full bg-gradient-to-r from-playdamnit-purple via-playdamnit-cyan to-playdamnit-purple absolute bottom-0 left-0 transition-all duration-500"></div>
                     </div>
                   ))}
                 </div>
@@ -299,10 +299,10 @@ export default function SearchModal({
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-quokka-purple/20 flex items-center justify-center">
-                    <Search className="h-8 w-8 text-quokka-cyan" />
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-playdamnit-purple/20 flex items-center justify-center">
+                    <Search className="h-8 w-8 text-playdamnit-cyan" />
                   </div>
-                  <p className="text-quokka-light/70">
+                  <p className="text-playdamnit-light/70">
                     Start typing to search for games
                   </p>
                 </div>
@@ -314,7 +314,7 @@ export default function SearchModal({
             {/* Back button */}
             <button
               onClick={handleBackToSearch}
-              className="absolute left-0 top-0 z-20 flex items-center text-quokka-light/70 hover:text-quokka-cyan transition-colors bg-quokka-darker/90 px-3 py-2 rounded-tr-lg rounded-bl-lg"
+              className="absolute left-0 top-0 z-20 flex items-center text-playdamnit-light/70 hover:text-playdamnit-cyan transition-colors bg-playdamnit-darker/90 px-3 py-2 rounded-tr-lg rounded-bl-lg"
             >
               <ArrowLeft className="h-5 w-5 mr-1" />
               <span>Back to search</span>

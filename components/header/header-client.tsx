@@ -44,7 +44,7 @@ export default function HeaderClient({ user }: HeaderClientProps) {
           variant="ghost"
           size="icon"
           onClick={() => setIsSearchOpen(true)}
-          className="rounded-lg bg-quokka-purple/20 text-white hover:bg-quokka-purple/40"
+          className="rounded-lg bg-playdamnit-purple/20 text-white hover:bg-playdamnit-purple/40"
         >
           <Search className="h-5 w-5" />
           <span className="sr-only">Search</span>
@@ -54,7 +54,7 @@ export default function HeaderClient({ user }: HeaderClientProps) {
           <div className="flex items-center gap-3">
             <Link
               href={`/${user.username || user.id}`}
-              className="flex items-center gap-3 bg-quokka-purple/20 hover:bg-quokka-purple/40 px-3 py-2 rounded-lg text-white"
+              className="flex items-center gap-3 bg-playdamnit-purple/20 hover:bg-playdamnit-purple/40 px-3 py-2 rounded-lg text-white"
             >
               {user.image ? (
                 <img
@@ -68,7 +68,7 @@ export default function HeaderClient({ user }: HeaderClientProps) {
                   className="h-8 w-8 rounded-lg object-cover"
                 />
               ) : (
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-quokka-purple text-white font-bold">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-playdamnit-purple text-white font-bold">
                   {(user.username || user.name || "U")[0].toUpperCase()}
                 </div>
               )}
@@ -86,7 +86,7 @@ export default function HeaderClient({ user }: HeaderClientProps) {
                   console.error("Error signing out:", error);
                 }
               }}
-              className="rounded-lg bg-quokka-purple/20 text-white hover:bg-red-500/40"
+              className="rounded-lg bg-playdamnit-purple/20 text-white hover:bg-red-500/40"
             >
               <LogOut className="h-5 w-5" />
             </Button>
@@ -94,7 +94,7 @@ export default function HeaderClient({ user }: HeaderClientProps) {
         ) : (
           <Button
             asChild
-            className="rounded-lg bg-quokka-purple hover:bg-quokka-purple/90 text-white"
+            className="rounded-lg bg-playdamnit-purple hover:bg-playdamnit-purple/90 text-white"
           >
             <Link href="/auth">
               <User className="h-5 w-5 mr-2" />
@@ -107,7 +107,7 @@ export default function HeaderClient({ user }: HeaderClientProps) {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden rounded-lg bg-quokka-purple/20 text-white hover:bg-quokka-purple/40"
+          className="md:hidden rounded-lg bg-playdamnit-purple/20 text-white hover:bg-playdamnit-purple/40"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? (
@@ -122,7 +122,7 @@ export default function HeaderClient({ user }: HeaderClientProps) {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            className="md:hidden bg-quokka-darker shadow-lg"
+            className="md:hidden bg-playdamnit-darker shadow-lg"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -137,8 +137,8 @@ export default function HeaderClient({ user }: HeaderClientProps) {
                     className={`px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 flex items-center gap-3
                       ${
                         activeLink === link.href
-                          ? "text-white bg-quokka-purple/30"
-                          : "text-white/80 hover:bg-quokka-purple/20"
+                          ? "text-white bg-playdamnit-purple/30"
+                          : "text-white/80 hover:bg-playdamnit-purple/20"
                       }`}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >

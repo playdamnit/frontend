@@ -209,10 +209,10 @@ export default function AddGameModal({
             key={statusOption}
             onClick={() => setStatus(statusOption as typeof status)}
             className={cn(
-              "py-2 px-4 rounded-full border border-quokka-purple/20 text-center",
+              "py-2 px-4 rounded-full border border-playdamnit-purple/20 text-center",
               status === statusOption
-                ? "bg-quokka-purple/10"
-                : "hover:bg-quokka-purple/5"
+                ? "bg-playdamnit-purple/10"
+                : "hover:bg-playdamnit-purple/5"
             )}
           >
             {statusOption}
@@ -244,7 +244,7 @@ export default function AddGameModal({
             className="absolute top-0 w-full h-[2px] opacity-0 cursor-pointer"
           />
           <div
-            className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-quokka-cyan rounded-full transition-all duration-200 ${
+            className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-playdamnit-cyan rounded-full transition-all duration-200 ${
               isDragging ? "scale-125" : ""
             }`}
             style={{ left: `${(rating / 10) * 100}%` }}
@@ -257,7 +257,7 @@ export default function AddGameModal({
         placeholder="Write your review in less than 5000 characters..."
         value={review}
         onChange={(e) => setReview(e.target.value)}
-        className="min-h-[200px] bg-quokka-dark border border-quokka-purple/20 text-white placeholder:text-gray-400 mb-8 rounded-lg p-4 focus:border-quokka-purple focus:ring-1 focus:ring-quokka-purple focus:outline-none"
+        className="min-h-[200px] bg-playdamnit-dark border border-playdamnit-purple/20 text-white placeholder:text-gray-400 mb-8 rounded-lg p-4 focus:border-playdamnit-purple focus:ring-1 focus:ring-playdamnit-purple focus:outline-none"
       />
 
       {/* Add/Update Game Button */}
@@ -265,10 +265,10 @@ export default function AddGameModal({
         onClick={handleSubmit}
         disabled={isSubmitting}
         className={cn(
-          "w-full py-4 bg-quokka-cyan text-quokka-dark rounded-full font-semibold transition-colors",
+          "w-full py-4 bg-playdamnit-cyan text-playdamnit-dark rounded-full font-semibold transition-colors",
           isSubmitting
             ? "opacity-50 cursor-not-allowed"
-            : "hover:bg-quokka-cyan/80"
+            : "hover:bg-playdamnit-cyan/80"
         )}
       >
         {isSubmitting
@@ -276,8 +276,8 @@ export default function AddGameModal({
             ? "Updating game..."
             : "Adding game..."
           : isEditing
-            ? "Update game"
-            : "Add game"}
+          ? "Update game"
+          : "Add game"}
       </button>
     </div>
   );
@@ -290,7 +290,7 @@ export default function AddGameModal({
   // Otherwise, wrap in Dialog
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-quokka-darker border border-quokka-purple/20 text-white max-w-2xl p-0 overflow-hidden">
+      <DialogContent className="bg-playdamnit-darker border border-playdamnit-purple/20 text-white max-w-2xl p-0 overflow-hidden">
         <ModalContent />
       </DialogContent>
     </Dialog>

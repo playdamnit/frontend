@@ -66,7 +66,7 @@ export default function SettingsPage() {
 
   if (isLoading) {
     return (
-      <div className="p-8 text-center text-quokka-light/60">
+      <div className="p-8 text-center text-playdamnit-light/60">
         Loading settings...
       </div>
     );
@@ -90,8 +90,8 @@ export default function SettingsPage() {
     <div className="flex-1 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-quokka-light">Settings</h1>
-          <p className="text-quokka-light/60 mt-2">
+          <h1 className="text-3xl font-bold text-playdamnit-light">Settings</h1>
+          <p className="text-playdamnit-light/60 mt-2">
             Manage your account preferences and profile
           </p>
         </div>
@@ -103,8 +103,8 @@ export default function SettingsPage() {
               onClick={() => setActiveTab(tab.name)}
               className={`px-4 py-2 rounded-lg flex items-center gap-2 whitespace-nowrap transition-all ${
                 tab.active
-                  ? "bg-quokka-purple text-white"
-                  : "bg-quokka-dark/30 text-quokka-light/70 hover:bg-quokka-dark/50 hover:text-quokka-light"
+                  ? "bg-playdamnit-purple text-white"
+                  : "bg-playdamnit-dark/30 text-playdamnit-light/70 hover:bg-playdamnit-dark/50 hover:text-playdamnit-light"
               }`}
             >
               {renderIcon(tab.iconName)}
@@ -123,11 +123,11 @@ export default function SettingsPage() {
           activeTab !== "Passkeys" &&
           activeTab !== "Email" &&
           activeTab !== "Account" && (
-            <div className="bg-quokka-dark/30 border border-quokka-purple/10 rounded-xl p-6 md:p-8 text-center">
-              <h2 className="text-xl font-semibold text-quokka-light/70 mb-2">
+            <div className="bg-playdamnit-dark/30 border border-playdamnit-purple/10 rounded-xl p-6 md:p-8 text-center">
+              <h2 className="text-xl font-semibold text-playdamnit-light/70 mb-2">
                 Coming Soon
               </h2>
-              <p className="text-quokka-light/50">
+              <p className="text-playdamnit-light/50">
                 This feature is currently under development.
               </p>
             </div>

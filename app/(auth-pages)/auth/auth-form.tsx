@@ -105,9 +105,9 @@ export function AuthForm() {
   };
 
   return (
-    <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-quokka-light to-quokka-purple/10 dark:from-quokka-dark dark:to-quokka-purple/20">
+    <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-playdamnit-light to-playdamnit-purple/10 dark:from-playdamnit-dark dark:to-playdamnit-purple/20">
       <div className="w-[100vw] flex min-h-screen flex-col items-center justify-center p-4 md:p-8 lg:p-12">
-        <div className="w-full max-w-3xl overflow-hidden rounded-xl border border-quokka-purple/20 bg-background/90 backdrop-blur-xl shadow-lg">
+        <div className="w-full max-w-3xl overflow-hidden rounded-xl border border-playdamnit-purple/20 bg-background/90 backdrop-blur-xl shadow-lg">
           <div className="flex min-h-[80vh] flex-col items-center justify-center p-6 md:p-8 lg:p-10">
             <Link
               href="/"
@@ -129,7 +129,7 @@ export function AuthForm() {
                 >
                   <form onSubmit={handleSignIn} className="space-y-6">
                     <div className="text-center">
-                      <h1 className="text-3xl font-bold text-quokka-purple">
+                      <h1 className="text-3xl font-bold text-playdamnit-purple">
                         Sign in
                       </h1>
                       <div className="mt-2 flex justify-center gap-1 text-sm text-muted-foreground">
@@ -137,7 +137,7 @@ export function AuthForm() {
                         <button
                           type="button"
                           onClick={() => changeMode("signup")}
-                          className="font-medium text-quokka-purple hover:text-quokka-cyan transition-colors"
+                          className="font-medium text-playdamnit-purple hover:text-playdamnit-cyan transition-colors"
                         >
                           Create account
                         </button>
@@ -155,7 +155,7 @@ export function AuthForm() {
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="you@example.com"
                           required
-                          className="h-12 border-input/50 focus-visible:ring-quokka-purple/50 text-base"
+                          className="h-12 border-input/50 focus-visible:ring-playdamnit-purple/50 text-base"
                         />
                       </div>
 
@@ -179,7 +179,7 @@ export function AuthForm() {
                           onChange={(e) => setPassword(e.target.value)}
                           placeholder="Your password"
                           required
-                          className="h-12 border-input/50 focus-visible:ring-quokka-purple/50 text-base"
+                          className="h-12 border-input/50 focus-visible:ring-playdamnit-purple/50 text-base"
                         />
                       </div>
 
@@ -194,14 +194,14 @@ export function AuthForm() {
                       <Button
                         type="submit"
                         disabled={isPending || emailSignIn.isPending}
-                        className="w-full h-12 mt-2 bg-quokka-purple hover:bg-quokka-purple/90 text-white text-base"
+                        className="w-full h-12 mt-2 bg-playdamnit-purple hover:bg-playdamnit-purple/90 text-white text-base"
                       >
                         {emailSignIn.isPending ? "Signing in..." : "Sign in"}
                       </Button>
 
                       <div className="relative py-2">
                         <div className="absolute inset-0 flex items-center">
-                          <div className="w-full border-t border-quokka-purple/20"></div>
+                          <div className="w-full border-t border-playdamnit-purple/20"></div>
                         </div>
                         <div className="relative flex justify-center text-xs">
                           <span className="bg-background px-2 text-muted-foreground">
@@ -215,7 +215,7 @@ export function AuthForm() {
                         onClick={handlePasskeySignIn}
                         disabled={isPending || passkeySignIn.isPending}
                         variant="outline"
-                        className="w-full h-12 border-quokka-purple/20 hover:bg-quokka-purple/10 text-quokka-light flex items-center justify-center gap-2"
+                        className="w-full h-12 border-playdamnit-purple/20 hover:bg-playdamnit-purple/10 text-playdamnit-light flex items-center justify-center gap-2"
                       >
                         <span className="text-xl">🔑</span>
                         {passkeySignIn.isPending
@@ -239,7 +239,7 @@ export function AuthForm() {
                 >
                   <form onSubmit={handleSignUp} className="space-y-6">
                     <div className="text-center">
-                      <h1 className="text-3xl font-bold text-quokka-purple">
+                      <h1 className="text-3xl font-bold text-playdamnit-purple">
                         Create account
                       </h1>
                       <div className="mt-2 flex justify-center gap-1 text-sm text-muted-foreground">
@@ -247,7 +247,7 @@ export function AuthForm() {
                         <button
                           type="button"
                           onClick={() => changeMode("signin")}
-                          className="font-medium text-quokka-purple hover:text-quokka-cyan transition-colors"
+                          className="font-medium text-playdamnit-purple hover:text-playdamnit-cyan transition-colors"
                         >
                           Sign in
                         </button>
@@ -266,7 +266,7 @@ export function AuthForm() {
                           placeholder="you@example.com"
                           type="email"
                           required
-                          className="h-12 border-input/50 focus-visible:ring-quokka-purple/50 text-base"
+                          className="h-12 border-input/50 focus-visible:ring-playdamnit-purple/50 text-base"
                         />
                       </div>
 
@@ -282,7 +282,7 @@ export function AuthForm() {
                           required
                           pattern="^[a-zA-Z0-9_]{3,15}$"
                           title="Username must be 3-15 characters long and can only contain letters, numbers, and underscores"
-                          className="h-12 border-input/50 focus-visible:ring-quokka-purple/50 text-base"
+                          className="h-12 border-input/50 focus-visible:ring-playdamnit-purple/50 text-base"
                         />
                       </div>
 
@@ -298,7 +298,7 @@ export function AuthForm() {
                           placeholder="Create a password"
                           minLength={8}
                           required
-                          className="h-12 border-input/50 focus-visible:ring-quokka-purple/50 text-base"
+                          className="h-12 border-input/50 focus-visible:ring-playdamnit-purple/50 text-base"
                         />
                       </div>
 
@@ -313,7 +313,7 @@ export function AuthForm() {
                       <Button
                         type="submit"
                         disabled={isPending || emailSignUp.isPending}
-                        className="w-full h-12 mt-2 bg-quokka-purple hover:bg-quokka-purple/90 text-white text-base"
+                        className="w-full h-12 mt-2 bg-playdamnit-purple hover:bg-playdamnit-purple/90 text-white text-base"
                       >
                         {emailSignUp.isPending
                           ? "Creating account..."
@@ -336,7 +336,7 @@ export function AuthForm() {
                 >
                   <div className="space-y-6">
                     <div className="text-center">
-                      <h1 className="text-3xl font-bold text-quokka-purple">
+                      <h1 className="text-3xl font-bold text-playdamnit-purple">
                         Reset password
                       </h1>
                       <div className="mt-2 flex justify-center gap-1 text-sm text-muted-foreground">
@@ -344,7 +344,7 @@ export function AuthForm() {
                         <button
                           type="button"
                           onClick={() => changeMode("signin")}
-                          className="font-medium text-quokka-purple hover:text-quokka-cyan transition-colors"
+                          className="font-medium text-playdamnit-purple hover:text-playdamnit-cyan transition-colors"
                         >
                           Sign in
                         </button>
@@ -352,7 +352,7 @@ export function AuthForm() {
                     </div>
 
                     <div className="space-y-4">
-                      <div className="mt-6 text-center text-quokka-light/70">
+                      <div className="mt-6 text-center text-playdamnit-light/70">
                         <p>Password reset functionality is coming soon.</p>
                         <p className="mt-2">
                           Please contact support for assistance.

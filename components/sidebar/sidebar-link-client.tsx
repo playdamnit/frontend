@@ -56,23 +56,23 @@ const SidebarLink = ({ item }: { item: NavigationItem }) => {
       className={cn(
         "group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 relative overflow-hidden",
         isActive()
-          ? "text-quokka-cyan bg-quokka-purple/10 border-l-2 border-quokka-cyan"
-          : "text-quokka-light/60 hover:text-quokka-light hover:bg-quokka-purple/5"
+          ? "text-playdamnit-cyan bg-playdamnit-purple/10 border-l-2 border-playdamnit-cyan"
+          : "text-playdamnit-light/60 hover:text-playdamnit-light hover:bg-playdamnit-purple/5"
       )}
     >
       <div
         className={cn(
           "flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200",
           isActive()
-            ? "bg-quokka-purple/20 text-quokka-cyan"
-            : "text-quokka-light/40 group-hover:text-quokka-cyan"
+            ? "bg-playdamnit-purple/20 text-playdamnit-cyan"
+            : "text-playdamnit-light/40 group-hover:text-playdamnit-cyan"
         )}
       >
         {renderIcon()}
       </div>
       <span className="hidden md:block">{item.name}</span>
 
-      <div className="absolute left-full ml-2 px-2 py-1 bg-quokka-dark text-quokka-light text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 md:hidden">
+      <div className="absolute left-full ml-2 px-2 py-1 bg-playdamnit-dark text-playdamnit-light text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 md:hidden">
         {item.name}
       </div>
     </Link>

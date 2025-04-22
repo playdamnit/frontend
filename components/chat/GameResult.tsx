@@ -80,7 +80,7 @@ export default function GameResult({ game, className }: GameResultProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="bg-quokka-dark/50 border border-quokka-purple/20 rounded-lg overflow-hidden">
+        <div className="bg-playdamnit-dark/50 border border-playdamnit-purple/20 rounded-lg overflow-hidden">
           <div className="flex">
             {/* Game cover */}
             <div className="relative w-[100px] h-[140px] flex-shrink-0">
@@ -90,16 +90,16 @@ export default function GameResult({ game, className }: GameResultProps) {
                 className="h-full w-full object-cover"
               />
               {game.totalRating && !game.userRating && (
-                <div className="absolute bottom-2 left-2 bg-quokka-darker/80 rounded-full px-2 py-1 flex items-center z-20">
-                  <Star className="h-3 w-3 text-quokka-cyan mr-1" />
+                <div className="absolute bottom-2 left-2 bg-playdamnit-darker/80 rounded-full px-2 py-1 flex items-center z-20">
+                  <Star className="h-3 w-3 text-playdamnit-cyan mr-1" />
                   <span className="text-xs font-medium">
                     {(game.totalRating / 10).toFixed(1)}
                   </span>
                 </div>
               )}
               {game.userRating && (
-                <div className="absolute bottom-2 left-2 bg-quokka-purple/80 rounded-full px-2 py-1 flex items-center z-20">
-                  <Star className="h-3 w-3 text-quokka-cyan mr-1" />
+                <div className="absolute bottom-2 left-2 bg-playdamnit-purple/80 rounded-full px-2 py-1 flex items-center z-20">
+                  <Star className="h-3 w-3 text-playdamnit-cyan mr-1" />
                   <span className="text-xs font-medium">
                     {game.userRating.toFixed(1)}
                   </span>
@@ -116,21 +116,21 @@ export default function GameResult({ game, className }: GameResultProps) {
                   </h3>
                   <button
                     onClick={handleOpenAddModal}
-                    className="w-8 h-8 rounded-full bg-quokka-purple/30 flex items-center justify-center hover:bg-quokka-purple hover:scale-110 transition-all duration-300"
+                    className="w-8 h-8 rounded-full bg-playdamnit-purple/30 flex items-center justify-center hover:bg-playdamnit-purple hover:scale-110 transition-all duration-300"
                     aria-label="Add game to collection"
                   >
-                    <PlusCircle className="h-5 w-5 text-quokka-cyan" />
+                    <PlusCircle className="h-5 w-5 text-playdamnit-cyan" />
                   </button>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2 mb-2">
-                  <span className="text-sm text-quokka-light/70">
+                  <span className="text-sm text-playdamnit-light/70">
                     {formattedDate}
                   </span>
 
                   {game.userStatus && (
-                    <span className="bg-quokka-purple/30 rounded-full px-2 py-0.5 text-xs text-quokka-light flex items-center gap-1">
-                      <CheckCircle2 className="h-3 w-3 text-quokka-cyan" />
+                    <span className="bg-playdamnit-purple/30 rounded-full px-2 py-0.5 text-xs text-playdamnit-light flex items-center gap-1">
+                      <CheckCircle2 className="h-3 w-3 text-playdamnit-cyan" />
                       {formatStatus(game.userStatus)}
                     </span>
                   )}
@@ -142,13 +142,13 @@ export default function GameResult({ game, className }: GameResultProps) {
                     {game.genres.slice(0, 3).map((genre) => (
                       <span
                         key={genre.id}
-                        className="bg-quokka-purple/20 rounded-full px-2 py-0.5 text-xs text-quokka-light/70"
+                        className="bg-playdamnit-purple/20 rounded-full px-2 py-0.5 text-xs text-playdamnit-light/70"
                       >
                         {genre.name}
                       </span>
                     ))}
                     {game.genres.length > 3 && (
-                      <span className="bg-quokka-purple/20 rounded-full px-2 py-0.5 text-xs text-quokka-light/70">
+                      <span className="bg-playdamnit-purple/20 rounded-full px-2 py-0.5 text-xs text-playdamnit-light/70">
                         +{game.genres.length - 3}
                       </span>
                     )}
@@ -158,7 +158,7 @@ export default function GameResult({ game, className }: GameResultProps) {
                 {/* User review */}
                 {game.userReview && (
                   <div className="mb-2 mt-1">
-                    <p className="text-xs italic text-quokka-light/90 bg-quokka-purple/10 p-2 rounded-md border-l-2 border-quokka-purple/30">
+                    <p className="text-xs italic text-playdamnit-light/90 bg-playdamnit-purple/10 p-2 rounded-md border-l-2 border-playdamnit-purple/30">
                       &quot;{game.userReview}&quot;
                     </p>
                   </div>
@@ -166,7 +166,7 @@ export default function GameResult({ game, className }: GameResultProps) {
 
                 {/* Game summary */}
                 {game.summary && !game.userReview && (
-                  <p className="text-xs text-quokka-light/80 line-clamp-3">
+                  <p className="text-xs text-playdamnit-light/80 line-clamp-3">
                     {game.summary}
                   </p>
                 )}

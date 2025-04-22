@@ -69,28 +69,28 @@ export function EmailSettings({ user }: { user: any }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="bg-quokka-dark/30 border border-quokka-purple/10 rounded-xl p-6 md:p-8 shadow-lg hover:shadow-quokka-purple/5 hover:border-quokka-purple/30 transition-all"
+      className="bg-playdamnit-dark/30 border border-playdamnit-purple/10 rounded-xl p-6 md:p-8 shadow-lg hover:shadow-playdamnit-purple/5 hover:border-playdamnit-purple/30 transition-all"
     >
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-quokka-light mb-2 flex items-center">
-          <span className="inline-block w-1 h-6 bg-gradient-to-b from-quokka-purple to-quokka-cyan rounded-full mr-3"></span>
+        <h2 className="text-2xl font-bold text-playdamnit-light mb-2 flex items-center">
+          <span className="inline-block w-1 h-6 bg-gradient-to-b from-playdamnit-purple to-playdamnit-cyan rounded-full mr-3"></span>
           Email Management
         </h2>
-        <p className="text-quokka-light/60">
+        <p className="text-playdamnit-light/60">
           Update your email address and email preferences
         </p>
       </div>
 
       <div className="space-y-8">
-        <div className="bg-quokka-dark/50 p-6 rounded-lg">
-          <h3 className="text-lg font-semibold text-quokka-light mb-4">
+        <div className="bg-playdamnit-dark/50 p-6 rounded-lg">
+          <h3 className="text-lg font-semibold text-playdamnit-light mb-4">
             Current Email
           </h3>
 
           <div className="mb-2">
-            <div className="flex items-center gap-2 bg-quokka-darker/50 py-3 px-4 rounded-lg border border-quokka-purple/10">
-              <Mail className="w-5 h-5 text-quokka-purple/70" />
-              <span className="text-quokka-light">{user.email}</span>
+            <div className="flex items-center gap-2 bg-playdamnit-darker/50 py-3 px-4 rounded-lg border border-playdamnit-purple/10">
+              <Mail className="w-5 h-5 text-playdamnit-purple/70" />
+              <span className="text-playdamnit-light">{user.email}</span>
               {user.emailVerified ? (
                 <div className="ml-2 flex items-center text-green-500 text-xs bg-green-500/10 px-2 py-0.5 rounded-full">
                   <CheckCircle className="w-3 h-3 mr-1" />
@@ -107,7 +107,7 @@ export function EmailSettings({ user }: { user: any }) {
 
           {!user.emailVerified && (
             <div className="mb-6">
-              <p className="text-quokka-light/60 text-sm mb-2">
+              <p className="text-playdamnit-light/60 text-sm mb-2">
                 Please verify your email to access all features
               </p>
 
@@ -146,7 +146,7 @@ export function EmailSettings({ user }: { user: any }) {
           {!isChangingEmail ? (
             <Button
               onClick={() => setIsChangingEmail(true)}
-              className="bg-gradient-to-r from-quokka-purple to-quokka-cyan hover:opacity-90 text-white"
+              className="bg-gradient-to-r from-playdamnit-purple to-playdamnit-cyan hover:opacity-90 text-white"
             >
               Change Email
             </Button>
@@ -161,7 +161,7 @@ export function EmailSettings({ user }: { user: any }) {
                   onChange={(e) => setNewEmail(e.target.value)}
                   placeholder="your-new-email@example.com"
                   required
-                  className="bg-quokka-darker/70 border-quokka-purple/20 focus-visible:ring-quokka-purple/30"
+                  className="bg-playdamnit-darker/70 border-playdamnit-purple/20 focus-visible:ring-playdamnit-purple/30"
                 />
               </div>
 
@@ -174,9 +174,9 @@ export function EmailSettings({ user }: { user: any }) {
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   placeholder="Enter your current password"
                   required
-                  className="bg-quokka-darker/70 border-quokka-purple/20 focus-visible:ring-quokka-purple/30"
+                  className="bg-playdamnit-darker/70 border-playdamnit-purple/20 focus-visible:ring-playdamnit-purple/30"
                 />
-                <p className="text-xs text-quokka-light/50">
+                <p className="text-xs text-playdamnit-light/50">
                   For security reasons, we need to verify your identity
                 </p>
               </div>
@@ -191,7 +191,7 @@ export function EmailSettings({ user }: { user: any }) {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-gradient-to-r from-quokka-purple to-quokka-cyan hover:opacity-90 text-white"
+                  className="bg-gradient-to-r from-playdamnit-purple to-playdamnit-cyan hover:opacity-90 text-white"
                 >
                   {isSubmitting ? (
                     <>
@@ -211,7 +211,7 @@ export function EmailSettings({ user }: { user: any }) {
                     setError(null);
                   }}
                   variant="outline"
-                  className="bg-transparent border-quokka-purple/20 text-quokka-light/80 hover:bg-quokka-dark/50"
+                  className="bg-transparent border-playdamnit-purple/20 text-playdamnit-light/80 hover:bg-playdamnit-dark/50"
                 >
                   Cancel
                 </Button>

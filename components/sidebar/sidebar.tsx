@@ -31,7 +31,7 @@ const Sidebar = async () => {
   ];
 
   return (
-    <div className="w-20 md:w-64 border-r border-quokka-purple/10 bg-quokka-darker/50 flex flex-col h-screen sticky top-0">
+    <div className="w-20 md:w-64 border-r border-playdamnit-purple/10 bg-playdamnit-darker/50 flex flex-col h-screen sticky top-0">
       <div className="px-3 py-6 flex-1 overflow-y-auto scrollbar-hide">
         <nav className="space-y-1.5">
           {navigation.map((item) => (

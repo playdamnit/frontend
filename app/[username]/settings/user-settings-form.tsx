@@ -135,14 +135,16 @@ export function UserSettingsForm({ initialData }: UserSettingsFormProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="bg-quokka-dark/30 border border-quokka-purple/10 rounded-xl p-6 md:p-8 shadow-lg hover:shadow-quokka-purple/5 hover:border-quokka-purple/30 transition-all"
+      className="bg-playdamnit-dark/30 border border-playdamnit-purple/10 rounded-xl p-6 md:p-8 shadow-lg hover:shadow-playdamnit-purple/5 hover:border-playdamnit-purple/30 transition-all"
     >
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-quokka-light mb-2 flex items-center">
-          <span className="inline-block w-1 h-6 bg-gradient-to-b from-quokka-purple to-quokka-cyan rounded-full mr-3"></span>
+        <h2 className="text-2xl font-bold text-playdamnit-light mb-2 flex items-center">
+          <span className="inline-block w-1 h-6 bg-gradient-to-b from-playdamnit-purple to-playdamnit-cyan rounded-full mr-3"></span>
           Profile Settings
         </h2>
-        <p className="text-quokka-light/60">Customize your gaming profile</p>
+        <p className="text-playdamnit-light/60">
+          Customize your gaming profile
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -153,11 +155,13 @@ export function UserSettingsForm({ initialData }: UserSettingsFormProps) {
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`relative w-32 h-32 rounded-xl bg-gradient-to-br from-quokka-purple to-quokka-cyan p-1 cursor-pointer group transition-all duration-300 ${
-              isDragging ? "scale-105 shadow-lg shadow-quokka-purple/20" : ""
+            className={`relative w-32 h-32 rounded-xl bg-gradient-to-br from-playdamnit-purple to-playdamnit-cyan p-1 cursor-pointer group transition-all duration-300 ${
+              isDragging
+                ? "scale-105 shadow-lg shadow-playdamnit-purple/20"
+                : ""
             }`}
           >
-            <div className="w-full h-full rounded-lg bg-quokka-dark/80 overflow-hidden flex items-center justify-center">
+            <div className="w-full h-full rounded-lg bg-playdamnit-dark/80 overflow-hidden flex items-center justify-center">
               {avatarPreview ? (
                 <img
                   src={
@@ -169,20 +173,20 @@ export function UserSettingsForm({ initialData }: UserSettingsFormProps) {
                   className="w-full h-full object-cover absolute inset-0 rounded-lg"
                 />
               ) : (
-                <User className="w-12 h-12 text-quokka-cyan/50" />
+                <User className="w-12 h-12 text-playdamnit-cyan/50" />
               )}
-              <div className="absolute inset-0 bg-quokka-darker/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
+              <div className="absolute inset-0 bg-playdamnit-darker/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
                 <div className="flex flex-col items-center">
-                  <Camera className="w-8 h-8 text-quokka-cyan mb-2" />
-                  <span className="text-xs text-quokka-light/80 text-center px-2">
+                  <Camera className="w-8 h-8 text-playdamnit-cyan mb-2" />
+                  <span className="text-xs text-playdamnit-light/80 text-center px-2">
                     Click or drop image
                   </span>
                 </div>
               </div>
             </div>
             {isSaving && (
-              <div className="absolute inset-0 bg-quokka-darker/70 rounded-xl flex items-center justify-center">
-                <Loader2 className="w-8 h-8 text-quokka-cyan animate-spin" />
+              <div className="absolute inset-0 bg-playdamnit-darker/70 rounded-xl flex items-center justify-center">
+                <Loader2 className="w-8 h-8 text-playdamnit-cyan animate-spin" />
               </div>
             )}
           </div>
@@ -194,10 +198,10 @@ export function UserSettingsForm({ initialData }: UserSettingsFormProps) {
             onChange={handleAvatarChange}
           />
           <div className="flex-1 text-center md:text-left">
-            <h3 className="text-lg font-semibold text-quokka-light mb-2">
+            <h3 className="text-lg font-semibold text-playdamnit-light mb-2">
               Profile Picture
             </h3>
-            <p className="text-sm text-quokka-light/60 mb-3">
+            <p className="text-sm text-playdamnit-light/60 mb-3">
               Upload a profile picture to personalize your gaming profile. PNG
               or JPG, max 5MB.
             </p>
@@ -209,12 +213,12 @@ export function UserSettingsForm({ initialData }: UserSettingsFormProps) {
           <div className="space-y-2">
             <Label
               htmlFor="fullName"
-              className="text-quokka-light/80 font-medium"
+              className="text-playdamnit-light/80 font-medium"
             >
               Full Name
             </Label>
             <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-quokka-purple/20 to-quokka-cyan/20 rounded-lg opacity-0 group-focus-within:opacity-100 transition-opacity -z-10"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-playdamnit-purple/20 to-playdamnit-cyan/20 rounded-lg opacity-0 group-focus-within:opacity-100 transition-opacity -z-10"></div>
               <Input
                 id="fullName"
                 placeholder="John Doe"
@@ -225,19 +229,19 @@ export function UserSettingsForm({ initialData }: UserSettingsFormProps) {
                     fullName: e.target.value,
                   }))
                 }
-                className="bg-quokka-dark/30 border-quokka-purple/10 rounded-lg focus:border-quokka-purple/30 text-quokka-light"
+                className="bg-playdamnit-dark/30 border-playdamnit-purple/10 rounded-lg focus:border-playdamnit-purple/30 text-playdamnit-light"
               />
             </div>
           </div>
           <div className="space-y-2">
             <Label
               htmlFor="username"
-              className="text-quokka-light/80 font-medium"
+              className="text-playdamnit-light/80 font-medium"
             >
               Username
             </Label>
             <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-quokka-purple/20 to-quokka-cyan/20 rounded-lg opacity-0 group-focus-within:opacity-100 transition-opacity -z-10"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-playdamnit-purple/20 to-playdamnit-cyan/20 rounded-lg opacity-0 group-focus-within:opacity-100 transition-opacity -z-10"></div>
               <Input
                 id="username"
                 placeholder="@johndoe"
@@ -248,18 +252,18 @@ export function UserSettingsForm({ initialData }: UserSettingsFormProps) {
                     username: e.target.value,
                   }))
                 }
-                className="bg-quokka-dark/30 border-quokka-purple/10 rounded-lg focus:border-quokka-purple/30 text-quokka-light"
+                className="bg-playdamnit-dark/30 border-playdamnit-purple/10 rounded-lg focus:border-playdamnit-purple/30 text-playdamnit-light"
               />
             </div>
           </div>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="bio" className="text-quokka-light/80 font-medium">
+          <Label htmlFor="bio" className="text-playdamnit-light/80 font-medium">
             Bio
           </Label>
           <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-quokka-purple/20 to-quokka-cyan/20 rounded-lg opacity-0 group-focus-within:opacity-100 transition-opacity -z-10"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-playdamnit-purple/20 to-playdamnit-cyan/20 rounded-lg opacity-0 group-focus-within:opacity-100 transition-opacity -z-10"></div>
             <Textarea
               id="bio"
               placeholder="Tell us about your gaming interests and achievements..."
@@ -270,7 +274,7 @@ export function UserSettingsForm({ initialData }: UserSettingsFormProps) {
                   bio: e.target.value,
                 }))
               }
-              className="bg-quokka-dark/30 border-quokka-purple/10 rounded-lg focus:border-quokka-purple/30 text-quokka-light min-h-[120px]"
+              className="bg-playdamnit-dark/30 border-playdamnit-purple/10 rounded-lg focus:border-playdamnit-purple/30 text-playdamnit-light min-h-[120px]"
             />
           </div>
         </div>
@@ -305,7 +309,7 @@ export function UserSettingsForm({ initialData }: UserSettingsFormProps) {
           <Button
             type="submit"
             disabled={isSaving}
-            className="bg-gradient-to-r from-quokka-purple to-quokka-cyan hover:opacity-90 transition-opacity text-white px-6 py-2 rounded-lg flex items-center gap-2"
+            className="bg-gradient-to-r from-playdamnit-purple to-playdamnit-cyan hover:opacity-90 transition-opacity text-white px-6 py-2 rounded-lg flex items-center gap-2"
           >
             {isSaving ? (
               <>

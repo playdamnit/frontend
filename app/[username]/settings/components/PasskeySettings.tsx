@@ -41,28 +41,28 @@ export function PasskeySettings({ user }: { user: any }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="bg-quokka-dark/30 border border-quokka-purple/10 rounded-xl p-6 md:p-8 shadow-lg hover:shadow-quokka-purple/5 hover:border-quokka-purple/30 transition-all"
+      className="bg-playdamnit-dark/30 border border-playdamnit-purple/10 rounded-xl p-6 md:p-8 shadow-lg hover:shadow-playdamnit-purple/5 hover:border-playdamnit-purple/30 transition-all"
     >
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-quokka-light mb-2 flex items-center">
-          <span className="inline-block w-1 h-6 bg-gradient-to-b from-quokka-purple to-quokka-cyan rounded-full mr-3"></span>
+        <h2 className="text-2xl font-bold text-playdamnit-light mb-2 flex items-center">
+          <span className="inline-block w-1 h-6 bg-gradient-to-b from-playdamnit-purple to-playdamnit-cyan rounded-full mr-3"></span>
           Passkey Management
         </h2>
-        <p className="text-quokka-light/60">
+        <p className="text-playdamnit-light/60">
           Manage your passkeys for secure, passwordless login
         </p>
       </div>
 
       <div className="space-y-6">
-        <div className="bg-quokka-dark/50 p-4 rounded-lg">
+        <div className="bg-playdamnit-dark/50 p-4 rounded-lg">
           <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4 gap-3">
-            <h3 className="text-lg font-semibold text-quokka-light">
+            <h3 className="text-lg font-semibold text-playdamnit-light">
               Your Passkeys
             </h3>
             <Button
               onClick={handlePasskeyLogin}
               disabled={addPasskeyMutation.isPending}
-              className="bg-gradient-to-r from-quokka-purple to-quokka-cyan hover:opacity-90 text-white"
+              className="bg-gradient-to-r from-playdamnit-purple to-playdamnit-cyan hover:opacity-90 text-white"
             >
               {addPasskeyMutation.isPending ? (
                 <>
@@ -80,21 +80,21 @@ export function PasskeySettings({ user }: { user: any }) {
 
           {isLoadingPasskeys ? (
             <div className="text-center py-10">
-              <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-quokka-purple" />
-              <p className="text-quokka-light/60">Loading passkeys...</p>
+              <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-playdamnit-purple" />
+              <p className="text-playdamnit-light/60">Loading passkeys...</p>
             </div>
           ) : passkeys && passkeys.length > 0 ? (
             <div className="space-y-3">
               {passkeys.map((passkey) => (
                 <div
                   key={passkey.id}
-                  className="bg-quokka-darker/50 border border-quokka-purple/10 p-4 rounded-lg flex flex-col sm:flex-row justify-between sm:items-center gap-3"
+                  className="bg-playdamnit-darker/50 border border-playdamnit-purple/10 p-4 rounded-lg flex flex-col sm:flex-row justify-between sm:items-center gap-3"
                 >
                   <div>
-                    <span className="text-quokka-light font-medium truncate block">
+                    <span className="text-playdamnit-light font-medium truncate block">
                       {passkey.name || `Passkey ${passkey.id.substring(0, 8)}`}
                     </span>
-                    <p className="text-xs text-quokka-light/50 mt-1">
+                    <p className="text-xs text-playdamnit-light/50 mt-1">
                       Created:{" "}
                       {new Date(passkey.createdAt).toLocaleDateString()}
                     </p>
@@ -121,12 +121,12 @@ export function PasskeySettings({ user }: { user: any }) {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 bg-quokka-darker/30 rounded-lg">
-              <Key className="w-10 h-10 mx-auto mb-3 text-quokka-light/30" />
-              <p className="text-quokka-light/60 mb-2">
+            <div className="text-center py-8 bg-playdamnit-darker/30 rounded-lg">
+              <Key className="w-10 h-10 mx-auto mb-3 text-playdamnit-light/30" />
+              <p className="text-playdamnit-light/60 mb-2">
                 You don&apos;t have any passkeys yet
               </p>
-              <p className="text-sm text-quokka-light/40 max-w-md mx-auto">
+              <p className="text-sm text-playdamnit-light/40 max-w-md mx-auto">
                 Passkeys provide a secure, passwordless way to sign in to your
                 account using your device&apos;s authentication.
               </p>
@@ -135,27 +135,29 @@ export function PasskeySettings({ user }: { user: any }) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-          <div className="bg-quokka-dark/40 p-4 rounded-lg">
-            <h4 className="font-semibold text-quokka-light mb-2">
+          <div className="bg-playdamnit-dark/40 p-4 rounded-lg">
+            <h4 className="font-semibold text-playdamnit-light mb-2">
               What are passkeys?
             </h4>
-            <p className="text-sm text-quokka-light/60">
+            <p className="text-sm text-playdamnit-light/60">
               Passkeys are a safer alternative to passwords. They use biometrics
               or device PIN for verification.
             </p>
           </div>
-          <div className="bg-quokka-dark/40 p-4 rounded-lg">
-            <h4 className="font-semibold text-quokka-light mb-2">
+          <div className="bg-playdamnit-dark/40 p-4 rounded-lg">
+            <h4 className="font-semibold text-playdamnit-light mb-2">
               Why use passkeys?
             </h4>
-            <p className="text-sm text-quokka-light/60">
+            <p className="text-sm text-playdamnit-light/60">
               Passkeys can&apos;t be phished or stolen in data breaches, and
               work across your devices with the same security.
             </p>
           </div>
-          <div className="bg-quokka-dark/40 p-4 rounded-lg">
-            <h4 className="font-semibold text-quokka-light mb-2">How to use</h4>
-            <p className="text-sm text-quokka-light/60">
+          <div className="bg-playdamnit-dark/40 p-4 rounded-lg">
+            <h4 className="font-semibold text-playdamnit-light mb-2">
+              How to use
+            </h4>
+            <p className="text-sm text-playdamnit-light/60">
               Click &quot;Register New Passkey&quot; and follow the prompts on
               your device to set up passwordless login.
             </p>
@@ -168,22 +170,22 @@ export function PasskeySettings({ user }: { user: any }) {
         open={!!passkeyToDelete}
         onOpenChange={(open) => !open && setPasskeyToDelete(null)}
       >
-        <AlertDialogContent className="bg-quokka-darker border-quokka-purple/20 text-quokka-light">
+        <AlertDialogContent className="bg-playdamnit-darker border-playdamnit-purple/20 text-playdamnit-light">
           <AlertDialogHeader>
             <div className="mx-auto bg-red-500/10 p-3 rounded-full w-16 h-16 flex items-center justify-center mb-2">
               <AlertTriangle className="h-8 w-8 text-red-400" />
             </div>
-            <AlertDialogTitle className="text-xl text-quokka-light">
+            <AlertDialogTitle className="text-xl text-playdamnit-light">
               Delete Passkey
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-quokka-light/70">
+            <AlertDialogDescription className="text-playdamnit-light/70">
               Are you sure you want to delete this passkey? This action cannot
               be undone and you will need to register a new passkey if you want
               to use passwordless login again.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="mt-4">
-            <AlertDialogCancel className="bg-quokka-dark/50 border-quokka-purple/20 text-quokka-light hover:bg-quokka-dark hover:text-quokka-light/90">
+            <AlertDialogCancel className="bg-playdamnit-dark/50 border-playdamnit-purple/20 text-playdamnit-light hover:bg-playdamnit-dark hover:text-playdamnit-light/90">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction

@@ -46,7 +46,7 @@ export function GameCard({
       case "Want":
         return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
       default:
-        return "bg-quokka-purple/20 text-quokka-purple border-quokka-purple/30";
+        return "bg-playdamnit-purple/20 text-playdamnit-purple border-playdamnit-purple/30";
     }
   };
 
@@ -58,7 +58,7 @@ export function GameCard({
     if (rating >= 4)
       return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
     if (rating > 0) return "bg-red-500/20 text-red-400 border-red-500/30";
-    return "bg-quokka-dark/50 text-quokka-light/40 border-quokka-light/10";
+    return "bg-playdamnit-dark/50 text-playdamnit-light/40 border-playdamnit-light/10";
   };
 
   // Format rating display
@@ -74,14 +74,14 @@ export function GameCard({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className={`bg-quokka-dark/30 border border-quokka-purple/10 rounded-xl overflow-hidden hover:border-quokka-purple/30 transition-all hover:shadow-lg hover:shadow-quokka-purple/5 group ${
+        className={`bg-playdamnit-dark/30 border border-playdamnit-purple/10 rounded-xl overflow-hidden hover:border-playdamnit-purple/30 transition-all hover:shadow-lg hover:shadow-playdamnit-purple/5 group ${
           isOwnProfile ? "cursor-pointer relative" : ""
         }`}
         onClick={() => isOwnProfile && onGameClick(game)}
       >
         {isOwnProfile && (
           <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="bg-quokka-purple/80 text-white p-1 rounded-full">
+            <div className="bg-playdamnit-purple/80 text-white p-1 rounded-full">
               <Pencil size={14} />
             </div>
           </div>
@@ -89,7 +89,7 @@ export function GameCard({
         <div className="p-4">
           <div className="flex gap-4">
             {/* Game Cover */}
-            <div className="w-20 h-28 rounded-lg overflow-hidden bg-quokka-dark/50 flex-shrink-0">
+            <div className="w-20 h-28 rounded-lg overflow-hidden bg-playdamnit-dark/50 flex-shrink-0">
               {game.cover ? (
                 <img
                   src={
@@ -101,7 +101,7 @@ export function GameCard({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-quokka-light/30">
+                <div className="w-full h-full flex items-center justify-center text-playdamnit-light/30">
                   <Gamepad2 className="w-8 h-8" />
                 </div>
               )}
@@ -110,7 +110,7 @@ export function GameCard({
             {/* Game Info */}
             <div className="flex-1 min-w-0">
               <div className="flex justify-between items-start gap-2">
-                <h3 className="font-bold text-quokka-light truncate group-hover:text-quokka-cyan transition-colors">
+                <h3 className="font-bold text-playdamnit-light truncate group-hover:text-playdamnit-cyan transition-colors">
                   {game.title}
                 </h3>
                 <Badge className={`${getStatusColor(game.status)} text-xs`}>
@@ -118,19 +118,21 @@ export function GameCard({
                 </Badge>
               </div>
 
-              <div className="mt-1 text-sm text-quokka-light/60">
+              <div className="mt-1 text-sm text-playdamnit-light/60">
                 {game.platform}
               </div>
 
               <div className="mt-2">
                 {game.rating > 0 ? (
                   <Badge
-                    className={`${getRatingColor(game.rating)} text-xs px-2 py-1 font-medium`}
+                    className={`${getRatingColor(
+                      game.rating
+                    )} text-xs px-2 py-1 font-medium`}
                   >
                     {formatRating(game.rating)}
                   </Badge>
                 ) : (
-                  <span className="text-xs text-quokka-light/40">
+                  <span className="text-xs text-playdamnit-light/40">
                     Not rated
                   </span>
                 )}
@@ -141,13 +143,13 @@ export function GameCard({
                   game.genres.slice(0, 2).map((genre: string) => (
                     <span
                       key={genre}
-                      className="px-2 py-0.5 bg-quokka-dark/50 rounded-full text-xs text-quokka-light/60"
+                      className="px-2 py-0.5 bg-playdamnit-dark/50 rounded-full text-xs text-playdamnit-light/60"
                     >
                       {genre}
                     </span>
                   ))}
                 {game.genres && game.genres.length > 2 && (
-                  <span className="px-2 py-0.5 bg-quokka-dark/50 rounded-full text-xs text-quokka-light/60">
+                  <span className="px-2 py-0.5 bg-playdamnit-dark/50 rounded-full text-xs text-playdamnit-light/60">
                     +{game.genres.length - 2}
                   </span>
                 )}
@@ -156,22 +158,22 @@ export function GameCard({
           </div>
 
           {/* Game Stats */}
-          <div className="mt-4 pt-3 border-t border-quokka-purple/5 grid grid-cols-3 gap-2 text-xs">
+          <div className="mt-4 pt-3 border-t border-playdamnit-purple/5 grid grid-cols-3 gap-2 text-xs">
             {game.playtime !== undefined && (
-              <div className="flex items-center gap-1.5 text-quokka-light/60">
-                <Clock className="w-3 h-3 text-quokka-cyan" />
+              <div className="flex items-center gap-1.5 text-playdamnit-light/60">
+                <Clock className="w-3 h-3 text-playdamnit-cyan" />
                 <span>{game.playtime}h</span>
               </div>
             )}
             {game.achievements && (
-              <div className="flex items-center gap-1.5 text-quokka-light/60">
-                <Trophy className="w-3 h-3 text-quokka-cyan" />
+              <div className="flex items-center gap-1.5 text-playdamnit-light/60">
+                <Trophy className="w-3 h-3 text-playdamnit-cyan" />
                 <span>
                   {game.achievements.completed}/{game.achievements.total}
                 </span>
               </div>
             )}
-            <div className="flex items-center gap-1.5 text-quokka-light/60 justify-self-end col-span-2 justify-end">
+            <div className="flex items-center gap-1.5 text-playdamnit-light/60 justify-self-end col-span-2 justify-end">
               <span>{game.dateAdded}</span>
             </div>
           </div>
@@ -186,14 +188,14 @@ export function GameCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className={`bg-quokka-dark/30 border border-quokka-purple/10 rounded-xl overflow-hidden hover:border-quokka-purple/30 transition-all hover:shadow-lg hover:shadow-quokka-purple/5 group ${
+      className={`bg-playdamnit-dark/30 border border-playdamnit-purple/10 rounded-xl overflow-hidden hover:border-playdamnit-purple/30 transition-all hover:shadow-lg hover:shadow-playdamnit-purple/5 group ${
         isOwnProfile ? "cursor-pointer relative" : ""
       }`}
       onClick={() => isOwnProfile && onGameClick(game)}
     >
       {isOwnProfile && (
         <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-          <div className="bg-quokka-purple/80 text-white p-1 rounded-full">
+          <div className="bg-playdamnit-purple/80 text-white p-1 rounded-full">
             <Pencil size={14} />
           </div>
         </div>
@@ -201,7 +203,7 @@ export function GameCard({
       <div className="p-4">
         <div className="flex gap-6">
           {/* Game Cover */}
-          <div className="w-24 h-32 rounded-lg overflow-hidden bg-quokka-dark/50 flex-shrink-0">
+          <div className="w-24 h-32 rounded-lg overflow-hidden bg-playdamnit-dark/50 flex-shrink-0">
             {game.cover ? (
               <img
                 src={
@@ -213,7 +215,7 @@ export function GameCard({
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-quokka-light/30">
+              <div className="w-full h-full flex items-center justify-center text-playdamnit-light/30">
                 <Gamepad2 className="w-10 h-10" />
               </div>
             )}
@@ -223,12 +225,12 @@ export function GameCard({
           <div className="flex-1 min-w-0 flex flex-col">
             <div className="flex justify-between items-start gap-2">
               <div>
-                <h3 className="font-bold text-lg text-quokka-light group-hover:text-quokka-cyan transition-colors">
+                <h3 className="font-bold text-lg text-playdamnit-light group-hover:text-playdamnit-cyan transition-colors">
                   {game.title}
                 </h3>
-                <div className="mt-1 text-sm text-quokka-light/60 flex items-center gap-2">
+                <div className="mt-1 text-sm text-playdamnit-light/60 flex items-center gap-2">
                   <span>{game.platform}</span>
-                  <span className="text-quokka-light/20">•</span>
+                  <span className="text-playdamnit-light/20">•</span>
                   <span>{game.dateAdded}</span>
                 </div>
               </div>
@@ -238,7 +240,9 @@ export function GameCard({
                 </Badge>
                 {game.rating > 0 && (
                   <Badge
-                    className={`${getRatingColor(game.rating)} text-xs px-2 py-1 font-medium`}
+                    className={`${getRatingColor(
+                      game.rating
+                    )} text-xs px-2 py-1 font-medium`}
                   >
                     {formatRating(game.rating)}
                   </Badge>
@@ -251,7 +255,7 @@ export function GameCard({
                 game.genres.map((genre: string) => (
                   <span
                     key={genre}
-                    className="px-2 py-0.5 bg-quokka-dark/50 rounded-full text-xs text-quokka-light/60"
+                    className="px-2 py-0.5 bg-playdamnit-dark/50 rounded-full text-xs text-playdamnit-light/60"
                   >
                     {genre}
                   </span>
@@ -259,24 +263,24 @@ export function GameCard({
             </div>
 
             {/* Game Stats */}
-            <div className="mt-4 pt-3 border-t border-quokka-purple/5 flex gap-6 text-xs">
+            <div className="mt-4 pt-3 border-t border-playdamnit-purple/5 flex gap-6 text-xs">
               {game.playtime !== undefined && (
-                <div className="flex items-center gap-1.5 text-quokka-light/60">
-                  <Clock className="w-3 h-3 text-quokka-cyan" />
+                <div className="flex items-center gap-1.5 text-playdamnit-light/60">
+                  <Clock className="w-3 h-3 text-playdamnit-cyan" />
                   <span>{game.playtime}h played</span>
                 </div>
               )}
               {game.achievements && (
-                <div className="flex items-center gap-1.5 text-quokka-light/60">
-                  <Trophy className="w-3 h-3 text-quokka-cyan" />
+                <div className="flex items-center gap-1.5 text-playdamnit-light/60">
+                  <Trophy className="w-3 h-3 text-playdamnit-cyan" />
                   <span>
                     {game.achievements.completed}/{game.achievements.total}{" "}
                     achievements
                   </span>
                 </div>
               )}
-              <div className="flex items-center gap-1.5 text-quokka-light/60 ml-auto">
-                <span className="text-xs uppercase font-medium px-2 py-0.5 bg-quokka-dark/50 rounded-full">
+              <div className="flex items-center gap-1.5 text-playdamnit-light/60 ml-auto">
+                <span className="text-xs uppercase font-medium px-2 py-0.5 bg-playdamnit-dark/50 rounded-full">
                   {game.source}
                 </span>
               </div>

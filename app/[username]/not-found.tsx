@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function UserNotFound() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <h1 className="text-4xl font-bold text-quokka-purple mb-4">
+      <h1 className="text-4xl font-bold text-playdamnit-purple mb-4">
         User Not Found
       </h1>
       <p className="text-xl mb-8">
@@ -11,7 +11,7 @@ export default function UserNotFound() {
       </p>
       <Link
         href="/"
-        className="px-6 py-3 bg-quokka-purple text-white rounded-lg hover:bg-quokka-purple/90 transition-colors"
+        className="px-6 py-3 bg-playdamnit-purple text-white rounded-lg hover:bg-playdamnit-purple/90 transition-colors"
       >
         Return Home
       </Link>

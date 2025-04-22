@@ -47,8 +47,8 @@ export default function AIChatModal({ isOpen, onClose }: AIChatModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-quokka-darker border border-quokka-purple/20 text-white max-w-2xl p-0 h-[80vh] flex flex-col overflow-hidden">
-        <div className="p-4 border-b border-quokka-purple/20 flex items-center justify-between">
+      <DialogContent className="bg-playdamnit-darker border border-playdamnit-purple/20 text-white max-w-2xl p-0 h-[80vh] flex flex-col overflow-hidden">
+        <div className="p-4 border-b border-playdamnit-purple/20 flex items-center justify-between">
           <DialogTitle className="text-xl font-bold text-white">
             Game Assistant
           </DialogTitle>
@@ -56,18 +56,20 @@ export default function AIChatModal({ isOpen, onClose }: AIChatModalProps) {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="flex items-center gap-2 bg-quokka-dark/80 hover:bg-quokka-dark/90 transition-colors px-3 py-1.5 rounded-full border border-quokka-purple/40 mr-6 w-[140px] justify-between">
-                  <Filter className="h-3.5 w-3.5 text-quokka-cyan" />
+                <div className="flex items-center gap-2 bg-playdamnit-dark/80 hover:bg-playdamnit-dark/90 transition-colors px-3 py-1.5 rounded-full border border-playdamnit-purple/40 mr-6 w-[140px] justify-between">
+                  <Filter className="h-3.5 w-3.5 text-playdamnit-cyan" />
                   <Switch
                     id="game-filter"
                     checked={showOnlyGames}
                     onCheckedChange={setShowOnlyGames}
-                    className="data-[state=checked]:bg-quokka-purple/40 data-[state=unchecked]:bg-quokka-purple/40 [&>span]:bg-quokka-cyan"
+                    className="data-[state=checked]:bg-playdamnit-purple/40 data-[state=unchecked]:bg-playdamnit-purple/40 [&>span]:bg-playdamnit-cyan"
                   />
                   <span
                     className={cn(
                       "text-xs font-medium py-0 min-w-[70px] text-center",
-                      showOnlyGames ? "text-quokka-cyan" : "text-quokka-light"
+                      showOnlyGames
+                        ? "text-playdamnit-cyan"
+                        : "text-playdamnit-light"
                     )}
                   >
                     {showOnlyGames ? "Games only" : "All types"}
@@ -76,7 +78,7 @@ export default function AIChatModal({ isOpen, onClose }: AIChatModalProps) {
               </TooltipTrigger>
               <TooltipContent
                 side="bottom"
-                className="bg-quokka-dark border-quokka-purple/30 text-quokka-light"
+                className="bg-playdamnit-dark border-playdamnit-purple/30 text-playdamnit-light"
               >
                 <p className="text-xs max-w-[250px]">
                   {showOnlyGames
@@ -91,7 +93,7 @@ export default function AIChatModal({ isOpen, onClose }: AIChatModalProps) {
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.length === 0 ? (
             <div className="text-center text-gray-400 my-8">
-              <Bot className="w-12 h-12 mx-auto mb-4 text-quokka-cyan" />
+              <Bot className="w-12 h-12 mx-auto mb-4 text-playdamnit-cyan" />
               <p className="text-lg font-medium">
                 How can I help you with games?
               </p>
@@ -115,15 +117,15 @@ export default function AIChatModal({ isOpen, onClose }: AIChatModalProps) {
                       className={cn(
                         "flex items-start gap-3 p-3 rounded-lg",
                         message.role === "user"
-                          ? "bg-quokka-purple/10"
-                          : "bg-quokka-dark/30"
+                          ? "bg-playdamnit-purple/10"
+                          : "bg-playdamnit-dark/30"
                       )}
                     >
-                      <div className="w-8 h-8 rounded-full flex items-center justify-center bg-quokka-purple/20">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center bg-playdamnit-purple/20">
                         {message.role === "user" ? (
-                          <User className="w-4 h-4 text-quokka-light" />
+                          <User className="w-4 h-4 text-playdamnit-light" />
                         ) : (
-                          <Bot className="w-4 h-4 text-quokka-cyan" />
+                          <Bot className="w-4 h-4 text-playdamnit-cyan" />
                         )}
                       </div>
                       <div className="flex-1">
@@ -180,7 +182,7 @@ export default function AIChatModal({ isOpen, onClose }: AIChatModalProps) {
                                 return (
                                   <p
                                     key={index}
-                                    className="text-sm italic text-quokka-light ml-11"
+                                    className="text-sm italic text-playdamnit-light ml-11"
                                   >
                                     Calling tool: {tool.toolName}...
                                   </p>
@@ -202,7 +204,7 @@ export default function AIChatModal({ isOpen, onClose }: AIChatModalProps) {
 
           {status === "streaming" && (
             <div className="flex items-center justify-center py-4">
-              <Loader2 className="w-6 h-6 text-quokka-cyan animate-spin" />
+              <Loader2 className="w-6 h-6 text-playdamnit-cyan animate-spin" />
             </div>
           )}
 
@@ -217,7 +219,7 @@ export default function AIChatModal({ isOpen, onClose }: AIChatModalProps) {
 
         <form
           onSubmit={handleSubmit}
-          className="border-t border-quokka-purple/20 p-4"
+          className="border-t border-playdamnit-purple/20 p-4"
         >
           <div className="relative">
             <input
@@ -225,7 +227,7 @@ export default function AIChatModal({ isOpen, onClose }: AIChatModalProps) {
               value={input}
               onChange={handleInputChange}
               placeholder="Tell me about a game you've played..."
-              className="w-full bg-quokka-dark border border-quokka-purple/20 rounded-full py-3 px-4 pr-12 text-white placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-quokka-purple"
+              className="w-full bg-playdamnit-dark border border-playdamnit-purple/20 rounded-full py-3 px-4 pr-12 text-white placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-playdamnit-purple"
               disabled={status === "streaming"}
             />
             <button
@@ -234,8 +236,8 @@ export default function AIChatModal({ isOpen, onClose }: AIChatModalProps) {
               className={cn(
                 "absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center",
                 input.trim()
-                  ? "bg-quokka-cyan text-quokka-dark"
-                  : "bg-quokka-purple/20 text-gray-400"
+                  ? "bg-playdamnit-cyan text-playdamnit-dark"
+                  : "bg-playdamnit-purple/20 text-gray-400"
               )}
             >
               <Send className="w-4 h-4" />
