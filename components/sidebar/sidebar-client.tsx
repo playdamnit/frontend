@@ -74,7 +74,10 @@ export const UserSection = ({ user }: UserSectionProps) => {
 export const AddGameButton = () => {
   return (
     <div className="p-3 border-t border-quokka-darker">
-      <Button className="w-full bg-gradient-to-r from-quokka-purple to-quokka-cyan hover:opacity-90 transition-opacity text-white rounded-lg flex items-center justify-center gap-2 py-2.5">
+      <Button
+        className="w-full bg-gradient-to-r from-quokka-purple to-quokka-cyan hover:opacity-90 transition-opacity text-white rounded-lg flex items-center justify-center gap-2 py-2.5"
+        // onClick={onAddGameClick}
+      >
         <Plus className="w-5 h-5" />
         <span className="hidden md:block">Add Game</span>
       </Button>

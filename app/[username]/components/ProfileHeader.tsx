@@ -96,9 +96,6 @@ export function ProfileHeader({
                     <Plus className="w-4 h-4" />
                     Add Game
                   </button>
-                  <button className="px-4 py-2 bg-quokka-purple/20 hover:bg-quokka-purple/30 text-quokka-purple rounded-lg transition-colors text-sm font-medium">
-                    Edit Profile
-                  </button>
                 </>
               )}
             </div>

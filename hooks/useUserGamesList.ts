@@ -43,7 +43,7 @@ async function getUserGames(params: UserGamesQueryParams) {
     const response = await axios.get(apiUrl, {
       withCredentials: true,
     });
-    const games = response.data;
+    const games = response.data.games;
     console.log(`Found ${games.length} games for user ${username}`);
 
     return {

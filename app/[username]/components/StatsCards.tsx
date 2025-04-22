@@ -27,7 +27,6 @@ export function StatsCards({
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       <Card className="bg-quokka-dark/30 border-quokka-purple/10 rounded-xl overflow-hidden group hover:border-quokka-purple/30 transition-colors">
         <CardHeader className="pb-2 relative">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-quokka-purple to-quokka-cyan scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
           <CardTitle className="text-sm font-medium flex items-center gap-2 text-quokka-light/70">
             <Clock className="w-4 h-4 text-quokka-cyan" />
             Total Playtime
@@ -45,7 +44,6 @@ export function StatsCards({
 
       <Card className="bg-quokka-dark/30 border-quokka-purple/10 rounded-xl overflow-hidden group hover:border-quokka-purple/30 transition-colors">
         <CardHeader className="pb-2 relative">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-quokka-purple to-quokka-cyan scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
           <CardTitle className="text-sm font-medium flex items-center gap-2 text-quokka-light/70">
             <Trophy className="w-4 h-4 text-quokka-cyan" />
             Completion Rate
@@ -64,7 +62,6 @@ export function StatsCards({
 
       <Card className="bg-quokka-dark/30 border-quokka-purple/10 rounded-xl overflow-hidden group hover:border-quokka-purple/30 transition-colors">
         <CardHeader className="pb-2 relative">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-quokka-purple to-quokka-cyan scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
           <CardTitle className="text-sm font-medium flex items-center gap-2 text-quokka-light/70">
             <Star className="w-4 h-4 text-quokka-cyan" />
             Achievements
@@ -83,7 +80,6 @@ export function StatsCards({
 
       <Card className="bg-quokka-dark/30 border-quokka-purple/10 rounded-xl overflow-hidden group hover:border-quokka-purple/30 transition-colors">
         <CardHeader className="pb-2 relative">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-quokka-purple to-quokka-cyan scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
           <CardTitle className="text-sm font-medium flex items-center gap-2 text-quokka-light/70">
             <Gamepad2 className="w-4 h-4 text-quokka-cyan" />
             Platform Distribution
