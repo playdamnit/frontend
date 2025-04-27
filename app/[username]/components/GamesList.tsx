@@ -7,6 +7,7 @@ interface GamesListProps {
   isOwnProfile: boolean;
   viewMode: "grid" | "row";
   onGameClick: (game: Game) => void;
+  onDeleteClick?: (game: Game) => void;
 }
 
 export function GamesList({
@@ -14,6 +15,7 @@ export function GamesList({
   isOwnProfile,
   viewMode,
   onGameClick,
+  onDeleteClick,
 }: GamesListProps) {
   if (!games || games.length === 0) {
     return (
@@ -38,6 +40,7 @@ export function GamesList({
             isOwnProfile={isOwnProfile}
             viewMode={viewMode}
             onGameClick={onGameClick}
+            onDeleteClick={onDeleteClick}
           />
         ))}
       </div>
@@ -53,6 +56,7 @@ export function GamesList({
           isOwnProfile={isOwnProfile}
           viewMode={viewMode}
           onGameClick={onGameClick}
+          onDeleteClick={onDeleteClick}
         />
       ))}
     </div>

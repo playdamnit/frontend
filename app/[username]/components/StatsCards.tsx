@@ -1,4 +1,5 @@
 import { Clock, Trophy, Star, Gamepad2 } from "lucide-react";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 

@@ -1,35 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import {
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
-// import { useUserGames } from "@/hooks/useUserGames";
+import { useQueryClient } from "@tanstack/react-query";
+
 import { ProfileHeader } from "./ProfileHeader";
-import { StatsCards } from "./StatsCards";
+// import { StatsCards } from "./StatsCards";
 import { ProfileTabs } from "./ProfileTabs";
 import { SearchAndFilter } from "./SearchAndFilter";
 import { GamesList } from "./GamesList";
-import { Game } from "./GameCard";
-import { GameSearchResult } from "@/utils/types/game";
 import AddGameModal from "@/components/add-game-modal";
 import SearchModal from "@/components/search/search-modal";
-
-// Create a client
-const queryClient = new QueryClient();
-
-// Wrapper component to provide the query client
-function ProfileContentWithQueryClient(
-  props: ProfileContentProps & { initialGamesData: any[] }
-) {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <ProfileContentInner {...props} />
-    </QueryClientProvider>
-  );
-}
+import {
+  Game,
+  getGetApiUserByUsernameGamesQueryKey,
+  useGetApiUserByUsernameGames,
+  useDeleteApiUserByUsernameGamesById,
+} from "@/playdamnit-client";
 
 export interface ProfileContentProps {
   isOwnProfile: boolean;
@@ -38,92 +24,66 @@ export interface ProfileContentProps {
   avatarUrl?: string;
 }
 
-function ProfileContentInner({
+export const ProfileContent = ({
   isOwnProfile,
   username,
   fullName,
   avatarUrl,
-  initialGamesData,
-}: ProfileContentProps & { initialGamesData: any[] }) {
+}: ProfileContentProps) => {
   const [activeTab, setActiveTab] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "row">("row");
-  const [selectedGame, setSelectedGame] = useState<GameSearchResult | null>(
-    null
-  );
+  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const { data: userGames, isLoading } = useGetApiUserByUsernameGames(username);
+  const deleteGameMutation = useDeleteApiUserByUsernameGamesById();
 
-  // Set up the query client
   const queryClient = useQueryClient();
 
-  // Pre-populate the query cache with the initial data
-  if (initialGamesData && initialGamesData.length > 0) {
-    queryClient.setQueryData(["userGames", username], {
-      games: initialGamesData,
-      isOwnProfile,
-    });
-  }
-
-  // Use the React Query hook
-  // const {
-  //   data: userGamesData,
-  //   isLoading,
-  //   error,
-  // } = useUserGames({
-  //   username,
-  //   enabled: true,
-  // });
-
-  // Use the data from the query or the initial data
-  const games = initialGamesData || [];
-
-  // Transform the data for the UI
-  const transformedGames = (Array.isArray(games) ? games : []).map(
-    (game: any) => ({
-      id: game.id,
-      title: game.name,
-      cover: game.cover?.url,
-      genres: game.genres?.map((g: any) => g.name) || [],
-      platform: game.platforms?.[0]?.name || "Unknown",
-      status: (game.userGameData?.status === "want_to_play"
-        ? "Want"
-        : game.userGameData?.status === "finished"
+  const transformedGames = userGames?.data.games.map((game) => ({
+    id: game.id,
+    title: game.name,
+    cover: game.cover?.url,
+    genres: game.genres?.map((g: any) => g.name) || [],
+    platform: game.platforms?.[0]?.name || "Unknown",
+    status: (game.userGameData?.status === "want_to_play"
+      ? "Want"
+      : game.userGameData?.status === "finished"
         ? "Finished"
         : game.userGameData?.status === "playing"
-        ? "Playing"
-        : game.userGameData?.status === "dropped"
-        ? "Dropped"
-        : game.userGameData?.status) as
-        | "Want"
-        | "Finished"
-        | "Playing"
-        | "Dropped",
-      rating: game.userGameData?.rating || 0,
-      playtime: Math.round((game.userGameData?.playtime_minutes || 0) / 60),
-      achievements: {
-        completed: game.userGameData?.achievements_completed || 0,
-        total: game.userGameData?.achievements_total || 0,
-      },
-      source: game.userGameData?.source || "manual",
-      dateAdded: game.userGameData?.addedAt
-        ? new Date(game.userGameData.addedAt).toLocaleDateString()
-        : new Date().toLocaleDateString(),
-    })
-  );
+          ? "Playing"
+          : game.userGameData?.status === "dropped"
+            ? "Dropped"
+            : game.userGameData?.status) as
+      | "Want"
+      | "Finished"
+      | "Playing"
+      | "Dropped",
+    rating: game.userGameData?.rating || 0,
+    // playtime: Math.round((game.userGameData?.playtime_minutes || 0) / 60),
+    // achievements: {
+    //   completed: game.userGameData?.achievements_completed || 0,
+    //   total: game.userGameData?.achievements_total || 0,
+    // },
+    source: game.userGameData?.source || "manual",
+    dateAdded: game.userGameData?.addedAt
+      ? new Date(game.userGameData.addedAt).toLocaleDateString()
+      : new Date().toLocaleDateString(),
+  }));
 
   const getStatusCount = (status: string) => {
-    if (status === "All") return transformedGames.length;
-    return transformedGames.filter((game) =>
+    if (status === "All") return transformedGames?.length || 0;
+    return transformedGames?.filter((game) =>
       status === "want_to_play"
         ? game.status === "Want"
         : status === "finished"
-        ? game.status === "Finished"
-        : status === "playing"
-        ? game.status === "Playing"
-        : status === "dropped"
-        ? game.status === "Dropped"
-        : game.status === status
+          ? game.status === "Finished"
+          : status === "playing"
+            ? game.status === "Playing"
+            : status === "dropped"
+              ? game.status === "Dropped"
+              : game.status === status
     ).length;
   };
 
@@ -160,39 +120,38 @@ function ProfileContentInner({
     },
   ];
 
-  const totalPlaytime = transformedGames.reduce(
-    (sum, game) => sum + (game.playtime || 0),
-    0
-  );
+  // const totalPlaytime = transformedGames?.reduce(
+  //   (sum, game) => sum + (game.playtime || 0),
+  //   0
+  // );
 
   const completionRate =
-    (transformedGames.filter((game) => game.status === "Finished").length /
-      transformedGames.length) *
-      100 || 0;
+    (transformedGames?.filter((game) => game.status === "Finished").length ||
+      0 / (transformedGames?.length || 0)) * 100 || 0;
 
-  const achievementsCompleted = transformedGames.reduce(
-    (sum, game) => sum + (game.achievements?.completed || 0),
-    0
-  );
+  // const achievementsCompleted = transformedGames?.reduce(
+  //   (sum, game) => sum + (game.achievements?.completed || 0),
+  //   0
+  // );
 
-  const achievementsTotal = transformedGames.reduce(
-    (sum, game) => sum + (game.achievements?.total || 0),
-    0
-  );
+  // const achievementsTotal = transformedGames.reduce(
+  //   (sum, game) => sum + (game.achievements?.total || 0),
+  //   0
+  // );
 
   // Calculate platform distribution
   const platformDistribution = Array.from(
-    new Set(transformedGames.map((g) => g.platform))
+    new Set(transformedGames?.map((g) => g.platform))
   ).map((platform) => {
-    const count = transformedGames.filter(
+    const count = transformedGames?.filter(
       (g) => g.platform === platform
     ).length;
-    const percentage = (count / transformedGames.length) * 100;
+    const percentage = (count || 0 / (transformedGames?.length || 0)) * 100;
     return { platform, count, percentage };
   });
 
   // Filter games based on active tab and search term
-  const filteredGames = transformedGames.filter((game) => {
+  const filteredGames = transformedGames?.filter((game) => {
     const matchesTab =
       activeTab === "All" ||
       (activeTab === "Finished" && game.status === "Finished") ||
@@ -210,50 +169,30 @@ function ProfileContentInner({
     return matchesTab && matchesSearch;
   });
 
-  // Function to handle opening the modal with the selected game
   const handleGameClick = (game: Game) => {
-    if (!isOwnProfile) return; // Only allow editing on own profile
+    if (!isOwnProfile) return;
 
-    // Convert Game to GameSearchResult format with additional properties for editing
-    // @ts-ignore
-    const gameForModal: GameSearchResult & {
+    const gameForModal: Game & {
       userStatus?: string;
       userRating?: number;
       userReview?: string;
       userGameId?: number;
     } = {
       id: game.id,
-      name: game.title,
-      slug: game.title.toLowerCase().replace(/\s+/g, "-"),
-      cover: game.cover
-        ? {
-            id: 0,
-            url: game.cover,
-            width: 0,
-            height: 0,
-          }
-        : undefined,
-      genres: game.genres.map((name: string) => ({
-        id: 0,
-        name,
-        slug: name.toLowerCase().replace(/\s+/g, "-"),
-      })),
-      platforms: [
-        {
-          id: 0,
-          name: game.platform,
-          slug: game.platform.toLowerCase().replace(/\s+/g, "-"),
-        },
-      ],
+      name: game.name,
+      slug: game.name.toLowerCase().replace(/\s+/g, "-"),
+      cover: game.cover,
+      genres: game.genres,
+      platforms: game.platforms,
       createdAt: Date.now(),
       // Add properties for editing
       userStatus:
-        game.status.toLowerCase() === "want"
+        game.userGameData?.status?.toLowerCase() === "want"
           ? "want_to_play"
-          : game.status.toLowerCase(),
-      userRating: game.rating,
-      userReview: "", // We don't have this in the Game interface, so default to empty
-      userGameId: game.id, // Use the game ID as the user game ID for now
+          : game.userGameData?.status?.toLowerCase(),
+      userRating: game.userGameData?.rating,
+      userReview: game.userGameData?.review,
+      userGameId: game.id,
     };
 
     setSelectedGame(gameForModal);
@@ -268,17 +207,44 @@ function ProfileContentInner({
   const handleModalSuccess = () => {
     setIsModalOpen(false);
     setSelectedGame(null);
-    // Invalidate the query to refresh the data
-    queryClient.invalidateQueries({ queryKey: ["userGames"] });
+
+    queryClient.invalidateQueries({
+      queryKey: getGetApiUserByUsernameGamesQueryKey(username),
+    });
   };
 
   const handleSearchModalOpen = () => {
     setIsSearchModalOpen(true);
   };
 
-  // Show loading state
-  // if (isLoading && !initialGamesData) {
-  if (!initialGamesData) {
+  // Handle game deletion
+  const handleDeleteGame = (game: Game) => {
+    if (!isOwnProfile) return; // Only allow deleting on own profile
+
+    if (
+      window.confirm(
+        `Are you sure you want to remove ${game.title} from your collection?`
+      )
+    ) {
+      deleteGameMutation.mutate(
+        { username, id: game.id },
+        {
+          onSuccess: () => {
+            // Invalidate the query to refresh the data
+            queryClient.invalidateQueries({
+              queryKey: getGetApiUserByUsernameGamesQueryKey(username),
+            });
+          },
+          onError: (error) => {
+            console.error("Error deleting game:", error);
+            alert("Failed to delete game. Please try again.");
+          },
+        }
+      );
+    }
+  };
+
+  if (isLoading) {
     return (
       <div className="flex-1 p-4 md:p-8">
         <div className="max-w-6xl mx-auto">
@@ -291,22 +257,6 @@ function ProfileContentInner({
       </div>
     );
   }
-
-  // Show error state
-  // if (error) {
-  //   return (
-  //     <div className="flex-1 p-4 md:p-8">
-  //       <div className="max-w-6xl mx-auto">
-  //         <div className="text-center py-playdamnit-
-  //           <div className="text-red-500 mb-2">Error loading games</div>
-  //           <div className="text-sm text-playdamnit-light/30">
-  //             Please try again later
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="flex-1 p-4 md:p-8">
@@ -324,14 +274,14 @@ function ProfileContentInner({
           onAddGameClick={handleSearchModalOpen}
         />
 
-        <StatsCards
-          totalPlaytime={totalPlaytime}
+        {/* <StatsCards
+          // totalPlaytime={totalPlaytime || 0}
           completionRate={completionRate}
-          achievementsCompleted={achievementsCompleted}
-          achievementsTotal={achievementsTotal}
-          totalGames={transformedGames.length}
+          // achievementsCompleted={achievementsCompleted}
+          // achievementsTotal={achievementsTotal}
+          totalGames={transformedGames?.length || 0}
           platformDistribution={platformDistribution}
-        />
+        /> */}
 
         <SearchAndFilter
           searchTerm={searchTerm}
@@ -351,6 +301,7 @@ function ProfileContentInner({
           isOwnProfile={isOwnProfile}
           viewMode={viewMode}
           onGameClick={handleGameClick}
+          onDeleteClick={isOwnProfile ? handleDeleteGame : undefined}
         />
 
         {/* Add Game Modal */}
@@ -368,7 +319,7 @@ function ProfileContentInner({
         <SearchModal
           isOpen={isSearchModalOpen}
           onClose={() => setIsSearchModalOpen(false)}
-          onGameSelect={(game: GameSearchResult) => {
+          onGameSelect={(game: Game) => {
             setSelectedGame(game);
             setIsModalOpen(true);
             setIsSearchModalOpen(false);
@@ -377,7 +328,4 @@ function ProfileContentInner({
       </div>
     </div>
   );
-}
-
-// Export the wrapper component
-export { ProfileContentWithQueryClient as ProfileContent };
+};

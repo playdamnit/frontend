@@ -1,23 +1,8 @@
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { getConfig } from "@/config";
 import { authClient } from "@/lib/authClient";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import { useState } from "react";
-
-const { backendUrl } = getConfig();
-
-export const useUserByUsername = (username: string, enabled = true) => {
-  return useQuery({
-    queryKey: ["userByUsername", username],
-    queryFn: async () => {
-      if (!username) throw new Error("Username is required");
-      const res = await axios.get(`${backendUrl}/user/${username}`);
-      return res.data;
-    },
-    enabled: enabled && !!username,
-    retry: false, // don't retry on 404
-  });
-};
 
 export const useUserSettings = (enabled = true) => {
   return useQuery({

@@ -1,7 +1,5 @@
 import { getSession } from "@/lib/authServer";
 import ProfileClient from "./components/ProfileClient";
-import { notFound } from "next/navigation";
-import { useUserByUsername } from "@/hooks/user";
 
 export default async function UserProfilePage(props: {
   params: Promise<{ username: string }>;

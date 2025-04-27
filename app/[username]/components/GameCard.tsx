@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Clock, Trophy, Gamepad2, Pencil } from "lucide-react";
+import { Clock, Trophy, Gamepad2, Pencil, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export interface Game {
@@ -26,6 +26,7 @@ interface GameCardProps {
   isOwnProfile: boolean;
   viewMode: "grid" | "row";
   onGameClick: (game: Game) => void;
+  onDeleteClick?: (game: Game) => void;
 }
 
 export function GameCard({
@@ -33,6 +34,7 @@ export function GameCard({
   isOwnProfile,
   viewMode,
   onGameClick,
+  onDeleteClick,
 }: GameCardProps) {
   // Get status color
   const getStatusColor = (status: string) => {
@@ -68,6 +70,13 @@ export function GameCard({
     return validRating.toFixed(1);
   };
 
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the card click from triggering
+    if (onDeleteClick) {
+      onDeleteClick(game);
+    }
+  };
+
   if (viewMode === "grid") {
     return (
       <motion.div
@@ -80,10 +89,18 @@ export function GameCard({
         onClick={() => isOwnProfile && onGameClick(game)}
       >
         {isOwnProfile && (
-          <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-2">
             <div className="bg-playdamnit-purple/80 text-white p-1 rounded-full">
               <Pencil size={14} />
             </div>
+            {onDeleteClick && (
+              <div
+                className="bg-red-500/80 text-white p-1 rounded-full cursor-pointer"
+                onClick={handleDelete}
+              >
+                <Trash2 size={14} />
+              </div>
+            )}
           </div>
         )}
         <div className="p-4">
@@ -194,10 +211,18 @@ export function GameCard({
       onClick={() => isOwnProfile && onGameClick(game)}
     >
       {isOwnProfile && (
-        <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-2">
           <div className="bg-playdamnit-purple/80 text-white p-1 rounded-full">
             <Pencil size={14} />
           </div>
+          {onDeleteClick && (
+            <div
+              className="bg-red-500/80 text-white p-1 rounded-full cursor-pointer"
+              onClick={handleDelete}
+            >
+              <Trash2 size={14} />
+            </div>
+          )}
         </div>
       )}
       <div className="p-4">

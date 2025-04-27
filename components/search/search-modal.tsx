@@ -10,8 +10,7 @@ import {
   Plus,
   Gamepad,
 } from "lucide-react";
-import { GameSearchResult } from "@/utils/types/game";
-import { useGameSearch } from "@/hooks/useGameSearch";
+import { Game, useGetApiGamesSearch } from "@/playdamnit-client";
 import AddGameModal from "../add-game-modal";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
@@ -32,7 +31,7 @@ const scrollbarStyles = `
 interface SearchModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onGameSelect?: (game: GameSearchResult) => void;
+  onGameSelect?: (game: Game) => void;
 }
 
 export default function SearchModal({
@@ -41,16 +40,20 @@ export default function SearchModal({
   onGameSelect,
 }: SearchModalProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedGame, setSelectedGame] = useState<GameSearchResult | null>(
-    null
+  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+
+  const { data: searchResults, isLoading } = useGetApiGamesSearch(
+    {
+      q: searchQuery,
+    },
+    {
+      query: {
+        enabled: searchQuery.length > 2,
+      },
+    }
   );
 
-  const { data: searchResults, isLoading } = useGameSearch({
-    query: searchQuery,
-    enabled: searchQuery.length > 2,
-  });
-
-  const handleGameSelect = (game: GameSearchResult) => {
+  const handleGameSelect = (game: Game) => {
     setSelectedGame(game);
     // If onGameSelect is provided, call it with the selected game
     if (onGameSelect) {
@@ -184,9 +187,10 @@ export default function SearchModal({
                     </div>
                   ))}
                 </div>
-              ) : searchResults?.results && searchResults.results.length > 0 ? (
+              ) : searchResults?.data &&
+                searchResults?.data?.results?.length > 0 ? (
                 <div className="grid grid-cols-1 gap-4">
-                  {searchResults.results.map((game) => (
+                  {searchResults.data.results.map((game) => (
                     <div
                       key={game.id}
                       className="group relative overflow-hidden rounded-xl bg-playdamnit-dark border border-playdamnit-purple/20 hover:border-playdamnit-purple/50 transition-all duration-300 cursor-pointer"
@@ -324,7 +328,6 @@ export default function SearchModal({
             <AddGameModal
               isOpen={true}
               onClose={() => setSelectedGame(null)}
-              onSuccess={handleGameAdded}
               game={selectedGame}
               isEmbedded={true}
             />

@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useUserGamesList } from "@/hooks/useUserGamesList";
-import { ProfileContent } from "./ProfileContent";
-import { useUserByUsername } from "@/hooks/user";
 import { notFound } from "next/navigation";
 import { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
+
+import { ProfileContent } from "./ProfileContent";
+import { useGetApiUserByUsername } from "@/playdamnit-client";
 
 type ProfileClientProps = {
   username: string;
@@ -23,28 +22,17 @@ export default function ProfileClient({
   isOwnProfile,
   currentUser,
 }: ProfileClientProps) {
-  const [userGamesData, setUserGamesData] = useState<any[]>([]);
-
-  // Fetch the user by username
   const {
     data: profileUser,
     isLoading: isUserLoading,
     error: userError,
-  } = useUserByUsername(username, !!username);
-
-  // Fetch the user's games data
-  const { data: gamesData, isLoading: isGamesLoading } = useUserGamesList({
-    username,
-    enabled: !!username,
+  } = useGetApiUserByUsername(username, {
+    query: {
+      enabled: !!username,
+    },
   });
 
-  useEffect(() => {
-    if (gamesData?.games) {
-      setUserGamesData(gamesData.games);
-    }
-  }, [gamesData]);
-
-  if (isUserLoading || isGamesLoading) {
+  if (isUserLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader2 className="w-10 h-10 animate-spin" />
@@ -65,12 +53,13 @@ export default function ProfileClient({
       isOwnProfile={isOwnProfile}
       username={username}
       fullName={
-        profileUser?.name || (isOwnProfile ? currentUser?.name : "") || ""
+        profileUser?.data?.name || (isOwnProfile ? currentUser?.name : "") || ""
       }
       avatarUrl={
-        profileUser?.image || (isOwnProfile ? currentUser?.image : "") || ""
+        profileUser?.data?.image ||
+        (isOwnProfile ? currentUser?.image : "") ||
+        ""
       }
-      initialGamesData={userGamesData}
     />
   );
 }

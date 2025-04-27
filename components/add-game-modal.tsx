@@ -2,19 +2,24 @@
 
 import type React from "react";
 import { useState, useMemo, useEffect, useRef } from "react";
-import { X } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
-import { GameSearchResult } from "@/utils/types/game";
+import {
+  Game,
+  usePostApiUserByUsernameGames,
+  usePatchApiUserByUsernameGamesById,
+  useGetApiMe,
+  getGetApiUserByUsernameGamesQueryKey,
+  getGetApiUserByUsernameQueryKey,
+  getGetApiMeQueryKey,
+} from "@/playdamnit-client";
 import { useQueryClient } from "@tanstack/react-query";
-import { useAddUserGame, useUpdateUserGame } from "@/hooks/useUserGames";
 
 interface AddGameModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: () => void;
-  game: GameSearchResult & {
+  game: Game & {
     userStatus?: string;
     userRating?: number;
     userReview?: string;
@@ -27,7 +32,6 @@ interface AddGameModalProps {
 export default function AddGameModal({
   isOpen,
   onClose,
-  onSuccess,
   game,
   isEditing = false,
   isEmbedded = false,
@@ -39,13 +43,12 @@ export default function AddGameModal({
   const [review, setReview] = useState("");
   const [isDragging, setIsDragging] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
+  const { data: me } = useGetApiMe();
   const queryClient = useQueryClient();
 
-  // Use our custom hooks
-  const addGameMutation = useAddUserGame();
-  const updateGameMutation = useUpdateUserGame(
-    isEditing && game.userGameId ? String(game.userGameId) : ""
-  );
+  // Use the new API hooks
+  const addGameMutation = usePostApiUserByUsernameGames();
+  const updateGameMutation = usePatchApiUserByUsernameGamesById();
 
   // Determine if we're in a submitting state
   const isSubmitting =
@@ -144,6 +147,11 @@ export default function AddGameModal({
   }, [isDragging]);
 
   const handleSubmit = async () => {
+    if (!me?.data.username) {
+      console.error("No username available");
+      return;
+    }
+
     try {
       // Convert status to database enum format
       const dbStatus =
@@ -156,25 +164,63 @@ export default function AddGameModal({
               | "want_to_play");
 
       if (isEditing && game.userGameId) {
-        // Update existing game using the mutation
-        await updateGameMutation.mutateAsync({
-          status: dbStatus,
-          rating: Math.round(rating * 10), // Convert to 0-100 range for storage
-          review: review,
-        });
+        // Update existing game
+        await updateGameMutation.mutateAsync(
+          {
+            username: me?.data.username,
+            id: game.userGameId,
+            data: {
+              status: dbStatus,
+              rating: Math.round(rating * 10), // Convert to 0-100 range for storage
+              review: review,
+            },
+          },
+          {
+            onSuccess: () => {
+              queryClient.invalidateQueries({
+                queryKey: getGetApiUserByUsernameQueryKey(me?.data.username),
+              });
+              queryClient.invalidateQueries({
+                queryKey: getGetApiUserByUsernameGamesQueryKey(
+                  me?.data.username
+                ),
+              });
+              queryClient.invalidateQueries({
+                queryKey: getGetApiMeQueryKey(),
+              });
+            },
+          }
+        );
       } else {
-        // Add new game using the mutation
-        await addGameMutation.mutateAsync({
-          gameId: game.id,
-          status: dbStatus,
-          rating: Math.round(rating), // No need to multiply by 10 anymore
-          review: review,
-          platformId: game.platforms?.[0]?.id || 0, // Use first platform as default
-          source: "manual",
-        });
+        // Add new game
+        await addGameMutation.mutateAsync(
+          {
+            username: me?.data.username,
+            data: {
+              gameId: game.id,
+              status: dbStatus,
+              rating: Math.round(rating * 10), // Convert to 0-100 range
+              review: review,
+              platformId: game.platforms?.[0]?.id || 1, // Use first platform as default or fallback to 1
+            },
+          },
+          {
+            onSuccess: () => {
+              queryClient.invalidateQueries({
+                queryKey: getGetApiUserByUsernameQueryKey(me?.data.username),
+              });
+              queryClient.invalidateQueries({
+                queryKey: getGetApiUserByUsernameGamesQueryKey(
+                  me?.data.username
+                ),
+              });
+              queryClient.invalidateQueries({
+                queryKey: getGetApiMeQueryKey(),
+              });
+            },
+          }
+        );
       }
-
-      onSuccess();
     } catch (error) {
       console.error("Error saving game:", error);
       // TODO: Show error toast
@@ -193,7 +239,9 @@ export default function AddGameModal({
         />
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-4xl font-bold">{rating.toFixed(1)}</span>
+            <span className="text-4xl font-bold">
+              {typeof rating === "number" ? rating.toFixed(1) : "0.0"}
+            </span>
             <span className="text-4xl transition-all duration-200">
               {getRatingEmoji}
             </span>
@@ -276,18 +324,16 @@ export default function AddGameModal({
             ? "Updating game..."
             : "Adding game..."
           : isEditing
-          ? "Update game"
-          : "Add game"}
+            ? "Update game"
+            : "Add game"}
       </button>
     </div>
   );
 
-  // If embedded, just return the content
   if (isEmbedded) {
     return <ModalContent />;
   }
 
-  // Otherwise, wrap in Dialog
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-playdamnit-darker border border-playdamnit-purple/20 text-white max-w-2xl p-0 overflow-hidden">
