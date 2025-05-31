@@ -5,7 +5,7 @@ import { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 
 import { ProfileContent } from "./ProfileContent";
-import { useGetApiUserByUsername } from "@/playdamnit-client";
+import { useGetApiUserByUsername } from "@playdamnit/api-client";
 
 type ProfileClientProps = {
   username: string;
@@ -26,11 +26,7 @@ export default function ProfileClient({
     data: profileUser,
     isLoading: isUserLoading,
     error: userError,
-  } = useGetApiUserByUsername(username, {
-    query: {
-      enabled: !!username,
-    },
-  });
+  } = useGetApiUserByUsername(username);
 
   if (isUserLoading) {
     return (

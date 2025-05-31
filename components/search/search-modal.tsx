@@ -10,7 +10,7 @@ import {
   Plus,
   Gamepad,
 } from "lucide-react";
-import { Game, useGetApiGamesSearch } from "@/playdamnit-client";
+import { Game, useGetApiGamesSearch } from "@playdamnit/api-client";
 import AddGameModal from "../add-game-modal";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";

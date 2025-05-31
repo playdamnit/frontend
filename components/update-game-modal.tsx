@@ -6,30 +6,30 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Game,
-  usePostApiUserByUsernameGames,
+  usePatchApiUserByUsernameGamesById,
   useGetApiMe,
   getGetApiUserByUsernameGamesQueryKey,
   getGetApiUserByUsernameQueryKey,
   getGetApiMeQueryKey,
+  UserGameWithUserData,
 } from "@playdamnit/api-client";
 import { useQueryClient } from "@tanstack/react-query";
 
-interface CreateGameModalProps {
+interface UpdateGameModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  game: Game;
+  game: UserGameWithUserData;
   isEmbedded?: boolean;
 }
 
-export default function CreateGameModal({
+export default function UpdateGameModal({
   isOpen,
   onClose,
   onSuccess,
   game,
   isEmbedded = false,
-}: CreateGameModalProps) {
+}: UpdateGameModalProps) {
   const [status, setStatus] = useState<
     "Finished" | "Playing" | "Dropped" | "Want"
   >("Want");
@@ -41,10 +41,39 @@ export default function CreateGameModal({
   const queryClient = useQueryClient();
 
   // Use the API hook
-  const addGameMutation = usePostApiUserByUsernameGames();
+  const updateGameMutation = usePatchApiUserByUsernameGamesById();
 
   // Determine if we're in a submitting state
-  const isSubmitting = addGameMutation.isPending;
+  const isSubmitting = updateGameMutation.isPending;
+
+  // Initialize with existing data
+  useEffect(() => {
+    if (game) {
+      // Try to extract status from game data if available
+      if (game.userGameData?.status) {
+        const statusMap: Record<
+          string,
+          "Finished" | "Playing" | "Dropped" | "Want"
+        > = {
+          finished: "Finished",
+          playing: "Playing",
+          dropped: "Dropped",
+          want_to_play: "Want",
+        };
+        setStatus(statusMap[game.userGameData?.status] || "Want");
+      }
+
+      // Set rating if available
+      if (game.userGameData?.rating) {
+        setRating(game.userGameData?.rating);
+      }
+
+      // Set review if available
+      if (game.userGameData?.review) {
+        setReview(game.userGameData?.review);
+      }
+    }
+  }, [game]);
 
   const getRatingEmoji = useMemo(() => {
     if (rating === 0) return "🤔";
@@ -104,8 +133,8 @@ export default function CreateGameModal({
   }, [isDragging]);
 
   const handleSubmit = async () => {
-    if (!me?.data.username) {
-      console.error("No username available");
+    if (!me?.data.username || !game.id) {
+      console.error("No username or game ID available");
       return;
     }
 
@@ -120,15 +149,14 @@ export default function CreateGameModal({
               | "dropped"
               | "want_to_play");
 
-      await addGameMutation.mutateAsync(
+      await updateGameMutation.mutateAsync(
         {
           username: me?.data.username,
+          id: game.id,
           data: {
-            gameId: game.id,
             status: dbStatus,
             rating: rating || 0,
             review: review || undefined,
-            platformId: game.platforms?.[0]?.id || 1, // Use first platform as default or fallback to 1
           },
         },
         {
@@ -148,7 +176,7 @@ export default function CreateGameModal({
         }
       );
     } catch (error) {
-      console.error("Error saving game:", error);
+      console.error("Error updating game:", error);
       // TODO: Show error toast
     }
   };
@@ -234,7 +262,7 @@ export default function CreateGameModal({
         className="min-h-[200px] bg-playdamnit-dark border border-playdamnit-purple/20 text-white placeholder:text-gray-400 mb-8 rounded-lg p-4 focus:border-playdamnit-purple focus:ring-1 focus:ring-playdamnit-purple focus:outline-none"
       />
 
-      {/* Add Game Button */}
+      {/* Update Game Button */}
       <button
         onClick={handleSubmit}
         disabled={isSubmitting}
@@ -245,7 +273,7 @@ export default function CreateGameModal({
             : "hover:bg-playdamnit-cyan/80"
         )}
       >
-        {isSubmitting ? "Adding game..." : "Add game"}
+        {isSubmitting ? "Updating game..." : "Update game"}
       </button>
     </div>
   );

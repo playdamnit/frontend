@@ -3,26 +3,10 @@
 import { motion } from "framer-motion";
 import { Clock, Trophy, Gamepad2, Pencil, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
-export interface Game {
-  id: number;
-  title: string;
-  cover?: string;
-  genres: string[];
-  platform: string;
-  status: "Want" | "Finished" | "Playing" | "Dropped";
-  rating: number;
-  playtime?: number;
-  achievements?: {
-    completed: number;
-    total: number;
-  };
-  source: string;
-  dateAdded: string;
-}
+import { Game, UserGameWithUserData } from "@playdamnit/api-client";
 
 interface GameCardProps {
-  game: Game;
+  game: UserGameWithUserData;
   isOwnProfile: boolean;
   viewMode: "grid" | "row";
   onGameClick: (game: Game) => void;
@@ -110,11 +94,11 @@ export function GameCard({
               {game.cover ? (
                 <img
                   src={
-                    game.cover.startsWith("//")
-                      ? `https:${game.cover.replace("t_thumb", "t_cover_big")}`
-                      : game.cover.replace("t_thumb", "t_cover_big")
+                    game.cover?.url?.startsWith("//")
+                      ? `https:${game.cover.url.replace("t_thumb", "t_cover_big")}`
+                      : game.cover?.url?.replace("t_thumb", "t_cover_big")
                   }
-                  alt={game.title}
+                  alt={game.name}
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -128,25 +112,27 @@ export function GameCard({
             <div className="flex-1 min-w-0">
               <div className="flex justify-between items-start gap-2">
                 <h3 className="font-bold text-playdamnit-light truncate group-hover:text-playdamnit-cyan transition-colors">
-                  {game.title}
+                  {game.name}
                 </h3>
-                <Badge className={`${getStatusColor(game.status)} text-xs`}>
-                  {game.status}
+                <Badge
+                  className={`${getStatusColor(game.userGameData?.status)} text-xs`}
+                >
+                  {game.userGameData?.status}
                 </Badge>
               </div>
 
               <div className="mt-1 text-sm text-playdamnit-light/60">
-                {game.platform}
+                {game.platforms?.[0]?.name}
               </div>
 
               <div className="mt-2">
-                {game.rating > 0 ? (
+                {game.userGameData?.rating && game.userGameData?.rating > 0 ? (
                   <Badge
                     className={`${getRatingColor(
-                      game.rating
+                      game.userGameData?.rating
                     )} text-xs px-2 py-1 font-medium`}
                   >
-                    {formatRating(game.rating)}
+                    {formatRating(game.userGameData?.rating)}
                   </Badge>
                 ) : (
                   <span className="text-xs text-playdamnit-light/40">
@@ -157,12 +143,12 @@ export function GameCard({
 
               <div className="mt-3 flex flex-wrap gap-1">
                 {game.genres &&
-                  game.genres.slice(0, 2).map((genre: string) => (
+                  game.genres.slice(0, 2).map((genre) => (
                     <span
-                      key={genre}
+                      key={genre.id}
                       className="px-2 py-0.5 bg-playdamnit-dark/50 rounded-full text-xs text-playdamnit-light/60"
                     >
-                      {genre}
+                      {genre.name}
                     </span>
                   ))}
                 {game.genres && game.genres.length > 2 && (
@@ -175,7 +161,7 @@ export function GameCard({
           </div>
 
           {/* Game Stats */}
-          <div className="mt-4 pt-3 border-t border-playdamnit-purple/5 grid grid-cols-3 gap-2 text-xs">
+          {/* <div className="mt-4 pt-3 border-t border-playdamnit-purple/5 grid grid-cols-3 gap-2 text-xs">
             {game.playtime !== undefined && (
               <div className="flex items-center gap-1.5 text-playdamnit-light/60">
                 <Clock className="w-3 h-3 text-playdamnit-cyan" />
@@ -193,7 +179,7 @@ export function GameCard({
             <div className="flex items-center gap-1.5 text-playdamnit-light/60 justify-self-end col-span-2 justify-end">
               <span>{game.dateAdded}</span>
             </div>
-          </div>
+          </div> */}
         </div>
       </motion.div>
     );
@@ -232,11 +218,11 @@ export function GameCard({
             {game.cover ? (
               <img
                 src={
-                  game.cover.startsWith("//")
-                    ? `https:${game.cover.replace("t_thumb", "t_cover_big")}`
-                    : game.cover.replace("t_thumb", "t_cover_big")
+                  game.cover?.url?.startsWith("//")
+                    ? `https:${game.cover.url.replace("t_thumb", "t_cover_big")}`
+                    : game.cover?.url?.replace("t_thumb", "t_cover_big")
                 }
-                alt={game.title}
+                alt={game.name}
                 className="w-full h-full object-cover"
               />
             ) : (
@@ -251,25 +237,27 @@ export function GameCard({
             <div className="flex justify-between items-start gap-2">
               <div>
                 <h3 className="font-bold text-lg text-playdamnit-light group-hover:text-playdamnit-cyan transition-colors">
-                  {game.title}
+                  {game.name}
                 </h3>
                 <div className="mt-1 text-sm text-playdamnit-light/60 flex items-center gap-2">
-                  <span>{game.platform}</span>
-                  <span className="text-playdamnit-light/20">•</span>
-                  <span>{game.dateAdded}</span>
+                  <span>{game.platforms?.[0]?.name}</span>
+                  {/* <span className="text-playdamnit-light/20">•</span> */}
+                  {/* <span>{game.dateAdded}</span> */}
                 </div>
               </div>
               <div className="flex flex-col items-end gap-2">
-                <Badge className={`${getStatusColor(game.status)} text-xs`}>
-                  {game.status}
+                <Badge
+                  className={`${getStatusColor(game.userGameData?.status)} text-xs`}
+                >
+                  {game.userGameData?.status}
                 </Badge>
-                {game.rating > 0 && (
+                {game.userGameData?.rating && game.userGameData?.rating > 0 && (
                   <Badge
                     className={`${getRatingColor(
-                      game.rating
+                      game.userGameData?.rating
                     )} text-xs px-2 py-1 font-medium`}
                   >
-                    {formatRating(game.rating)}
+                    {formatRating(game.userGameData?.rating)}
                   </Badge>
                 )}
               </div>
@@ -277,18 +265,18 @@ export function GameCard({
 
             <div className="mt-auto pt-3 flex flex-wrap gap-2">
               {game.genres &&
-                game.genres.map((genre: string) => (
+                game.genres.map((genre) => (
                   <span
-                    key={genre}
+                    key={genre.id}
                     className="px-2 py-0.5 bg-playdamnit-dark/50 rounded-full text-xs text-playdamnit-light/60"
                   >
-                    {genre}
+                    {genre.name}
                   </span>
                 ))}
             </div>
 
             {/* Game Stats */}
-            <div className="mt-4 pt-3 border-t border-playdamnit-purple/5 flex gap-6 text-xs">
+            {/* <div className="mt-4 pt-3 border-t border-playdamnit-purple/5 flex gap-6 text-xs">
               {game.playtime !== undefined && (
                 <div className="flex items-center gap-1.5 text-playdamnit-light/60">
                   <Clock className="w-3 h-3 text-playdamnit-cyan" />
@@ -309,7 +297,7 @@ export function GameCard({
                   {game.source}
                 </span>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

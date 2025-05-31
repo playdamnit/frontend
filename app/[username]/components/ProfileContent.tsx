@@ -15,7 +15,7 @@ import {
   getGetApiUserByUsernameGamesQueryKey,
   useGetApiUserByUsernameGames,
   useDeleteApiUserByUsernameGamesById,
-} from "@/playdamnit-client";
+} from "@playdamnit/api-client";
 
 export interface ProfileContentProps {
   isOwnProfile: boolean;
@@ -41,49 +41,51 @@ export const ProfileContent = ({
 
   const queryClient = useQueryClient();
 
-  const transformedGames = userGames?.data.games.map((game) => ({
-    id: game.id,
-    title: game.name,
-    cover: game.cover?.url,
-    genres: game.genres?.map((g: any) => g.name) || [],
-    platform: game.platforms?.[0]?.name || "Unknown",
-    status: (game.userGameData?.status === "want_to_play"
-      ? "Want"
-      : game.userGameData?.status === "finished"
-        ? "Finished"
-        : game.userGameData?.status === "playing"
-          ? "Playing"
-          : game.userGameData?.status === "dropped"
-            ? "Dropped"
-            : game.userGameData?.status) as
-      | "Want"
-      | "Finished"
-      | "Playing"
-      | "Dropped",
-    rating: game.userGameData?.rating || 0,
-    // playtime: Math.round((game.userGameData?.playtime_minutes || 0) / 60),
-    // achievements: {
-    //   completed: game.userGameData?.achievements_completed || 0,
-    //   total: game.userGameData?.achievements_total || 0,
-    // },
-    source: game.userGameData?.source || "manual",
-    dateAdded: game.userGameData?.addedAt
-      ? new Date(game.userGameData.addedAt).toLocaleDateString()
-      : new Date().toLocaleDateString(),
-  }));
+  // const transformedGames = userGames?.data.games.map((game) => ({
+  //   id: game.id,
+  //   name: game.name,
+  //   cover: game.cover?.url,
+  //   genres: game.genres?.map((g: any) => g.name) || [],
+  //   platform: game.platforms?.[0]?.name || "Unknown",
+  //   status: (game.userGameData?.status === "want_to_play"
+  //     ? "Want"
+  //     : game.userGameData?.status === "finished"
+  //       ? "Finished"
+  //       : game.userGameData?.status === "playing"
+  //         ? "Playing"
+  //         : game.userGameData?.status === "dropped"
+  //           ? "Dropped"
+  //           : game.userGameData?.status) as
+  //     | "Want"
+  //     | "Finished"
+  //     | "Playing"
+  //     | "Dropped",
+  //   rating: game.userGameData?.rating || 0,
+  //   // playtime: Math.round((game.userGameData?.playtime_minutes || 0) / 60),
+  //   // achievements: {
+  //   //   completed: game.userGameData?.achievements_completed || 0,
+  //   //   total: game.userGameData?.achievements_total || 0,
+  //   // },
+  //   source: game.userGameData?.source || "manual",
+  //   dateAdded: game.userGameData?.addedAt
+  //     ? new Date(game.userGameData.addedAt).toLocaleDateString()
+  //     : new Date().toLocaleDateString(),
+  // }));
+
+  const games = userGames?.data.results || [];
 
   const getStatusCount = (status: string) => {
-    if (status === "All") return transformedGames?.length || 0;
-    return transformedGames?.filter((game) =>
+    if (status === "All") return games?.length || 0;
+    return games?.filter((game) =>
       status === "want_to_play"
-        ? game.status === "Want"
+        ? game.userGameData?.status === "want_to_play"
         : status === "finished"
-          ? game.status === "Finished"
+          ? game.userGameData?.status === "finished"
           : status === "playing"
-            ? game.status === "Playing"
+            ? game.userGameData?.status === "playing"
             : status === "dropped"
-              ? game.status === "Dropped"
-              : game.status === status
+              ? game.userGameData?.status === "dropped"
+              : game.userGameData?.status === status
     ).length;
   };
 
@@ -125,9 +127,9 @@ export const ProfileContent = ({
   //   0
   // );
 
-  const completionRate =
-    (transformedGames?.filter((game) => game.status === "Finished").length ||
-      0 / (transformedGames?.length || 0)) * 100 || 0;
+  // const completionRate =
+  //   (games?.filter((game) => game.status === "Finished").length ||
+  //     0 / (transformedGames?.length || 0)) * 100 || 0;
 
   // const achievementsCompleted = transformedGames?.reduce(
   //   (sum, game) => sum + (game.achievements?.completed || 0),
@@ -139,31 +141,55 @@ export const ProfileContent = ({
   //   0
   // );
 
-  // Calculate platform distribution
   const platformDistribution = Array.from(
-    new Set(transformedGames?.map((g) => g.platform))
+    new Set(games?.map((g) => g.platforms?.[0]?.name))
   ).map((platform) => {
-    const count = transformedGames?.filter(
-      (g) => g.platform === platform
+    const count = games?.filter(
+      (g) => g.platforms?.[0]?.name === platform
     ).length;
-    const percentage = (count || 0 / (transformedGames?.length || 0)) * 100;
+    const percentage = (count || 0 / (games?.length || 0)) * 100;
     return { platform, count, percentage };
   });
 
-  // Filter games based on active tab and search term
-  const filteredGames = transformedGames?.filter((game) => {
+  // Sort games by createdAt date (or firstReleaseDate as fallback)
+  const sortedGames = [...(games || [])].sort((a, b) => {
+    // First try to use userGameData.addedAt
+    if (a.userGameData?.addedAt && b.userGameData?.addedAt) {
+      return (
+        new Date(b.userGameData.addedAt).getTime() -
+        new Date(a.userGameData.addedAt).getTime()
+      );
+    }
+
+    // Fall back to firstReleaseDate if available
+    if (a.firstReleaseDate && b.firstReleaseDate) {
+      return b.firstReleaseDate - a.firstReleaseDate;
+    }
+
+    // Fall back to createdAt if available
+    if (a.createdAt && b.createdAt) {
+      return b.createdAt - a.createdAt;
+    }
+
+    // If nothing else works, sort by name
+    return a.name.localeCompare(b.name);
+  });
+
+  const filteredGames = sortedGames?.filter((game) => {
     const matchesTab =
       activeTab === "All" ||
-      (activeTab === "Finished" && game.status === "Finished") ||
-      (activeTab === "Playing" && game.status === "Playing") ||
-      (activeTab === "Dropped" && game.status === "Dropped") ||
-      (activeTab === "Want" && game.status === "Want");
+      (activeTab === "Finished" && game.userGameData?.status === "finished") ||
+      (activeTab === "Playing" && game.userGameData?.status === "playing") ||
+      (activeTab === "Dropped" && game.userGameData?.status === "dropped") ||
+      (activeTab === "Want" && game.userGameData?.status === "want_to_play");
 
     const matchesSearch =
-      game.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      game.platform.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      game.genres.some((genre: string) =>
-        genre.toLowerCase().includes(searchTerm.toLowerCase())
+      game.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      game.platforms?.[0]?.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      game.genres.some((genre) =>
+        genre.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
 
     return matchesTab && matchesSearch;
@@ -172,30 +198,30 @@ export const ProfileContent = ({
   const handleGameClick = (game: Game) => {
     if (!isOwnProfile) return;
 
-    const gameForModal: Game & {
-      userStatus?: string;
-      userRating?: number;
-      userReview?: string;
-      userGameId?: number;
-    } = {
-      id: game.id,
-      name: game.name,
-      slug: game.name.toLowerCase().replace(/\s+/g, "-"),
-      cover: game.cover,
-      genres: game.genres,
-      platforms: game.platforms,
-      createdAt: Date.now(),
-      // Add properties for editing
-      userStatus:
-        game.userGameData?.status?.toLowerCase() === "want"
-          ? "want_to_play"
-          : game.userGameData?.status?.toLowerCase(),
-      userRating: game.userGameData?.rating,
-      userReview: game.userGameData?.review,
-      userGameId: game.id,
-    };
+    // const gameForModal: Game & {
+    //   userStatus?: string;
+    //   userRating?: number;
+    //   userReview?: string;
+    //   userGameId?: number;
+    // } = {
+    //   id: game.id,
+    //   name: game.name,
+    //   slug: game.name.toLowerCase().replace(/\s+/g, "-"),
+    //   cover: game.cover,
+    //   genres: game.genres,
+    //   platforms: game.platforms,
+    //   createdAt: Date.now(),
+    //   // Add properties for editing
+    //   userStatus:
+    //     game.userGameData?.status?.toLowerCase() === "want"
+    //       ? "want_to_play"
+    //       : game.userGameData?.status?.toLowerCase(),
+    //   userRating: game.userGameData?.rating,
+    //   userReview: game.userGameData?.review,
+    //   userGameId: game.id,
+    // };
 
-    setSelectedGame(gameForModal);
+    setSelectedGame(game);
     setIsModalOpen(true);
   };
 
@@ -207,30 +233,24 @@ export const ProfileContent = ({
   const handleModalSuccess = () => {
     setIsModalOpen(false);
     setSelectedGame(null);
-
-    queryClient.invalidateQueries({
-      queryKey: getGetApiUserByUsernameGamesQueryKey(username),
-    });
   };
 
   const handleSearchModalOpen = () => {
     setIsSearchModalOpen(true);
   };
 
-  // Handle game deletion
   const handleDeleteGame = (game: Game) => {
-    if (!isOwnProfile) return; // Only allow deleting on own profile
-
+    if (!isOwnProfile) return;
+    console.log("game", game);
     if (
       window.confirm(
-        `Are you sure you want to remove ${game.title} from your collection?`
+        `Are you sure you want to remove ${game.name} from your collection?`
       )
     ) {
       deleteGameMutation.mutate(
         { username, id: game.id },
         {
           onSuccess: () => {
-            // Invalidate the query to refresh the data
             queryClient.invalidateQueries({
               queryKey: getGetApiUserByUsernameGamesQueryKey(username),
             });

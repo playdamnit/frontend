@@ -6,12 +6,12 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Game,
   usePostApiUserByUsernameGames,
   useGetApiMe,
   getGetApiUserByUsernameGamesQueryKey,
   getGetApiUserByUsernameQueryKey,
   getGetApiMeQueryKey,
+  Game,
 } from "@playdamnit/api-client";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -41,10 +41,10 @@ export default function CreateGameModal({
   const queryClient = useQueryClient();
 
   // Use the API hook
-  const addGameMutation = usePostApiUserByUsernameGames();
+  const createGameMutation = usePostApiUserByUsernameGames();
 
   // Determine if we're in a submitting state
-  const isSubmitting = addGameMutation.isPending;
+  const isSubmitting = createGameMutation.isPending;
 
   const getRatingEmoji = useMemo(() => {
     if (rating === 0) return "🤔";
@@ -104,8 +104,8 @@ export default function CreateGameModal({
   }, [isDragging]);
 
   const handleSubmit = async () => {
-    if (!me?.data.username) {
-      console.error("No username available");
+    if (!me?.data.username || !game.id) {
+      console.error("No username or game ID available");
       return;
     }
 
@@ -120,7 +120,7 @@ export default function CreateGameModal({
               | "dropped"
               | "want_to_play");
 
-      await addGameMutation.mutateAsync(
+      await createGameMutation.mutateAsync(
         {
           username: me?.data.username,
           data: {
@@ -128,7 +128,7 @@ export default function CreateGameModal({
             status: dbStatus,
             rating: rating || 0,
             review: review || undefined,
-            platformId: game.platforms?.[0]?.id || 1, // Use first platform as default or fallback to 1
+            platformId: game.platforms?.[0]?.id || 1,
           },
         },
         {
@@ -148,7 +148,7 @@ export default function CreateGameModal({
         }
       );
     } catch (error) {
-      console.error("Error saving game:", error);
+      console.error("Error creating game:", error);
       // TODO: Show error toast
     }
   };
@@ -234,7 +234,7 @@ export default function CreateGameModal({
         className="min-h-[200px] bg-playdamnit-dark border border-playdamnit-purple/20 text-white placeholder:text-gray-400 mb-8 rounded-lg p-4 focus:border-playdamnit-purple focus:ring-1 focus:ring-playdamnit-purple focus:outline-none"
       />
 
-      {/* Add Game Button */}
+      {/* Create Game Button */}
       <button
         onClick={handleSubmit}
         disabled={isSubmitting}
