@@ -1,5 +1,7 @@
 import { Pencil, Trophy, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { ExportButton } from "./ExportButton";
+import { ImportButton } from "./ImportButton";
 
 interface ProfileHeaderProps {
   isOwnProfile: boolean;
@@ -89,6 +91,8 @@ export function ProfileHeader({
             <div className="flex gap-3">
               {isOwnProfile && (
                 <>
+                  <ExportButton username={username} />
+                  <ImportButton username={username} />
                   <button
                     onClick={onAddGameClick}
                     className="px-4 py-2 bg-gradient-to-r from-playdamnit-purple to-playdamnit-cyan text-white rounded-lg transition-colors text-sm font-medium flex items-center gap-2"

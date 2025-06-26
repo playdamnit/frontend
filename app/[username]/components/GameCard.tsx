@@ -1,7 +1,17 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Clock, Trophy, Gamepad2, Pencil, Trash2 } from "lucide-react";
+import {
+  Clock,
+  Trophy,
+  Gamepad2,
+  Pencil,
+  Trash2,
+  Calendar,
+  Star,
+  Users,
+  TrendingUp,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Game, UserGameWithUserData } from "@playdamnit/api-client";
 
@@ -9,8 +19,8 @@ interface GameCardProps {
   game: UserGameWithUserData;
   isOwnProfile: boolean;
   viewMode: "grid" | "row";
-  onGameClick: (game: Game) => void;
-  onDeleteClick?: (game: Game) => void;
+  onGameClick: (game: UserGameWithUserData) => void;
+  onDeleteClick?: (game: UserGameWithUserData) => void;
 }
 
 export function GameCard({
@@ -20,46 +30,134 @@ export function GameCard({
   onGameClick,
   onDeleteClick,
 }: GameCardProps) {
-  // Get status color
-  const getStatusColor = (status: string) => {
+  // Map database status to display status
+  const getDisplayStatus = (status?: string) => {
     switch (status) {
-      case "Finished":
-        return "bg-green-500/20 text-green-400 border-green-500/30";
-      case "Playing":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-      case "Dropped":
-        return "bg-red-500/20 text-red-400 border-red-500/30";
-      case "Want":
-        return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+      case "finished":
+        return "Finished";
+      case "playing":
+        return "Playing";
+      case "dropped":
+        return "Dropped";
+      case "want_to_play":
+        return "Want to Play";
       default:
-        return "bg-playdamnit-purple/20 text-playdamnit-purple border-playdamnit-purple/30";
+        return "Unknown";
+    }
+  };
+
+  // Get status color and icon
+  const getStatusInfo = (status?: string) => {
+    switch (status) {
+      case "finished":
+        return {
+          color:
+            "bg-playdamnit-cyan/15 text-playdamnit-cyan border-playdamnit-cyan/30",
+          icon: "✓",
+          label: "Finished",
+        };
+      case "playing":
+        return {
+          color: "bg-green-500/15 text-green-300 border-green-500/30",
+          icon: "▶",
+          label: "Playing",
+        };
+      case "dropped":
+        return {
+          color: "bg-red-500/15 text-red-300 border-red-500/30",
+          icon: "✕",
+          label: "Dropped",
+        };
+      case "want_to_play":
+        return {
+          color: "bg-blue-500/15 text-blue-300 border-blue-500/30",
+          icon: "⭐",
+          label: "Want to Play",
+        };
+      default:
+        return {
+          color:
+            "bg-playdamnit-purple/15 text-playdamnit-purple border-playdamnit-purple/30",
+          icon: "?",
+          label: "Unknown",
+        };
     }
   };
 
   // Get rating color based on score
   const getRatingColor = (rating: number) => {
-    if (rating >= 8)
-      return "bg-green-500/20 text-green-400 border-green-500/30";
-    if (rating >= 6) return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-    if (rating >= 4)
-      return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
-    if (rating > 0) return "bg-red-500/20 text-red-400 border-red-500/30";
-    return "bg-playdamnit-dark/50 text-playdamnit-light/40 border-playdamnit-light/10";
+    if (rating >= 8) return "text-green-400";
+    if (rating >= 6) return "text-playdamnit-cyan";
+    if (rating >= 4) return "text-yellow-400";
+    if (rating > 0) return "text-red-400";
+    return "text-playdamnit-light/40";
   };
 
   // Format rating display
   const formatRating = (rating: number) => {
-    // Ensure rating is a valid number between 0 and 10
     const validRating = Math.max(0, Math.min(10, rating || 0));
     return validRating.toFixed(1);
   };
 
+  // Format ended date
+  const formatEndedDate = (endedAt: string) => {
+    const date = new Date(endedAt);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 30) {
+      return `${diffDays}d ago`;
+    } else if (diffDays < 365) {
+      const months = Math.floor(diffDays / 30);
+      return `${months}mo ago`;
+    } else {
+      return date.getFullYear().toString();
+    }
+  };
+
+  // Format release date
+  const formatReleaseDate = (timestamp?: number | null) => {
+    if (!timestamp) return null;
+    const date = new Date(timestamp * 1000);
+    return date.getFullYear().toString();
+  };
+
+  // Check if game should show ended date
+  const shouldShowEndedDate = (status?: string, endedAt?: string | null) => {
+    return (status === "finished" || status === "dropped") && endedAt;
+  };
+
+  // Format cover image URL
+  const getCoverUrl = (coverUrl?: string | null): string | undefined => {
+    if (!coverUrl) return undefined;
+
+    if (coverUrl.startsWith("//")) {
+      return `https:${coverUrl.replace("t_thumb", "t_cover_big")}`;
+    }
+    return coverUrl.replace("t_thumb", "t_cover_big");
+  };
+
+  // Get platform display
+  const getPlatformDisplay = (platforms?: any[]) => {
+    if (!platforms || platforms.length === 0) return "Unknown";
+    const primary = platforms[0]?.name || "Unknown";
+    const additional = platforms.length > 1 ? ` +${platforms.length - 1}` : "";
+    return primary + additional;
+  };
+
   const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent the card click from triggering
+    e.stopPropagation();
     if (onDeleteClick) {
       onDeleteClick(game);
     }
   };
+
+  const statusInfo = getStatusInfo(game.userGameData?.status);
+  const coverUrl = getCoverUrl(game.cover?.url);
+  const rating = game.userGameData?.rating || 0;
+  const releaseYear = formatReleaseDate(game.firstReleaseDate);
+  const platformDisplay = getPlatformDisplay(game.platforms);
 
   if (viewMode === "grid") {
     return (
@@ -67,37 +165,34 @@ export function GameCard({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className={`bg-playdamnit-dark/30 border border-playdamnit-purple/10 rounded-xl overflow-hidden hover:border-playdamnit-purple/30 transition-all hover:shadow-lg hover:shadow-playdamnit-purple/5 group ${
+        className={`bg-playdamnit-dark/30 border border-playdamnit-purple/20 rounded-xl overflow-hidden hover:border-playdamnit-cyan/50 transition-all duration-200 hover:shadow-lg hover:shadow-playdamnit-purple/10 group ${
           isOwnProfile ? "cursor-pointer relative" : ""
         }`}
         onClick={() => isOwnProfile && onGameClick(game)}
       >
         {isOwnProfile && (
-          <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-2">
-            <div className="bg-playdamnit-purple/80 text-white p-1 rounded-full">
-              <Pencil size={14} />
+          <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-2">
+            <div className="bg-playdamnit-purple/90 text-white p-2 rounded-full hover:bg-playdamnit-purple transition-colors">
+              <Pencil size={12} />
             </div>
             {onDeleteClick && (
               <div
-                className="bg-red-500/80 text-white p-1 rounded-full cursor-pointer"
+                className="bg-red-500/90 text-white p-2 rounded-full cursor-pointer hover:bg-red-500 transition-colors"
                 onClick={handleDelete}
               >
-                <Trash2 size={14} />
+                <Trash2 size={12} />
               </div>
             )}
           </div>
         )}
+
         <div className="p-4">
           <div className="flex gap-4">
             {/* Game Cover */}
-            <div className="w-20 h-28 rounded-lg overflow-hidden bg-playdamnit-dark/50 flex-shrink-0">
-              {game.cover ? (
+            <div className="w-20 h-28 rounded-lg overflow-hidden bg-playdamnit-dark/50 flex-shrink-0 shadow-md">
+              {coverUrl ? (
                 <img
-                  src={
-                    game.cover?.url?.startsWith("//")
-                      ? `https:${game.cover.url.replace("t_thumb", "t_cover_big")}`
-                      : game.cover?.url?.replace("t_thumb", "t_cover_big")
-                  }
+                  src={coverUrl}
                   alt={game.name}
                   className="w-full h-full object-cover"
                 />
@@ -110,194 +205,204 @@ export function GameCard({
 
             {/* Game Info */}
             <div className="flex-1 min-w-0">
-              <div className="flex justify-between items-start gap-2">
+              <div className="flex justify-between items-start gap-2 mb-2">
                 <h3 className="font-bold text-playdamnit-light truncate group-hover:text-playdamnit-cyan transition-colors">
                   {game.name}
                 </h3>
                 <Badge
-                  className={`${getStatusColor(game.userGameData?.status)} text-xs`}
+                  variant="outline"
+                  className={`${statusInfo.color} text-xs font-medium flex-shrink-0`}
                 >
-                  {game.userGameData?.status}
+                  {statusInfo.icon} {statusInfo.label}
                 </Badge>
               </div>
 
-              <div className="mt-1 text-sm text-playdamnit-light/60">
-                {game.platforms?.[0]?.name}
+              <div className="text-sm text-playdamnit-light/60 mb-3 flex items-center gap-2">
+                <span>{platformDisplay}</span>
+                {releaseYear && (
+                  <>
+                    <span className="text-playdamnit-light/20">•</span>
+                    <span>{releaseYear}</span>
+                  </>
+                )}
               </div>
 
-              <div className="mt-2">
-                {game.userGameData?.rating && game.userGameData?.rating > 0 ? (
-                  <Badge
-                    className={`${getRatingColor(
-                      game.userGameData?.rating
-                    )} text-xs px-2 py-1 font-medium`}
-                  >
-                    {formatRating(game.userGameData?.rating)}
-                  </Badge>
+              {/* Rating & Date Row */}
+              <div className="flex items-center justify-between mb-3">
+                {rating > 0 ? (
+                  <div className="flex items-center gap-1">
+                    <Star className={`w-3 h-3 ${getRatingColor(rating)}`} />
+                    <span
+                      className={`text-sm font-medium ${getRatingColor(rating)}`}
+                    >
+                      {formatRating(rating)}
+                    </span>
+                  </div>
                 ) : (
                   <span className="text-xs text-playdamnit-light/40">
                     Not rated
                   </span>
                 )}
+
+                {shouldShowEndedDate(
+                  game.userGameData?.status,
+                  game.userGameData?.endedAt
+                ) && (
+                  <div className="text-xs text-playdamnit-light/60">
+                    {formatEndedDate(game.userGameData.endedAt!)}
+                  </div>
+                )}
               </div>
 
-              <div className="mt-3 flex flex-wrap gap-1">
-                {game.genres &&
-                  game.genres.slice(0, 2).map((genre) => (
-                    <span
-                      key={genre.id}
-                      className="px-2 py-0.5 bg-playdamnit-dark/50 rounded-full text-xs text-playdamnit-light/60"
-                    >
-                      {genre.name}
-                    </span>
-                  ))}
+              {/* Genres */}
+              <div className="flex flex-wrap gap-1">
+                {game.genres?.slice(0, 2).map((genre) => (
+                  <span
+                    key={genre.id}
+                    className="px-2 py-0.5 bg-playdamnit-purple/10 border border-playdamnit-purple/20 rounded-full text-xs text-playdamnit-light/70"
+                  >
+                    {genre.name}
+                  </span>
+                ))}
                 {game.genres && game.genres.length > 2 && (
-                  <span className="px-2 py-0.5 bg-playdamnit-dark/50 rounded-full text-xs text-playdamnit-light/60">
+                  <span className="px-2 py-0.5 bg-playdamnit-purple/10 border border-playdamnit-purple/20 rounded-full text-xs text-playdamnit-light/70">
                     +{game.genres.length - 2}
                   </span>
                 )}
               </div>
             </div>
           </div>
-
-          {/* Game Stats */}
-          {/* <div className="mt-4 pt-3 border-t border-playdamnit-purple/5 grid grid-cols-3 gap-2 text-xs">
-            {game.playtime !== undefined && (
-              <div className="flex items-center gap-1.5 text-playdamnit-light/60">
-                <Clock className="w-3 h-3 text-playdamnit-cyan" />
-                <span>{game.playtime}h</span>
-              </div>
-            )}
-            {game.achievements && (
-              <div className="flex items-center gap-1.5 text-playdamnit-light/60">
-                <Trophy className="w-3 h-3 text-playdamnit-cyan" />
-                <span>
-                  {game.achievements.completed}/{game.achievements.total}
-                </span>
-              </div>
-            )}
-            <div className="flex items-center gap-1.5 text-playdamnit-light/60 justify-self-end col-span-2 justify-end">
-              <span>{game.dateAdded}</span>
-            </div>
-          </div> */}
         </div>
       </motion.div>
     );
   }
 
-  // Row view
+  // Row view - Compact analytics-style layout
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className={`bg-playdamnit-dark/30 border border-playdamnit-purple/10 rounded-xl overflow-hidden hover:border-playdamnit-purple/30 transition-all hover:shadow-lg hover:shadow-playdamnit-purple/5 group ${
+      className={`bg-playdamnit-dark/30 border border-playdamnit-purple/20 rounded-xl overflow-hidden hover:border-playdamnit-cyan/50 transition-all duration-200 hover:shadow-lg hover:shadow-playdamnit-purple/10 group ${
         isOwnProfile ? "cursor-pointer relative" : ""
       }`}
       onClick={() => isOwnProfile && onGameClick(game)}
     >
       {isOwnProfile && (
-        <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-2">
-          <div className="bg-playdamnit-purple/80 text-white p-1 rounded-full">
-            <Pencil size={14} />
+        <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-2">
+          <div className="bg-playdamnit-purple/90 text-white p-2 rounded-full hover:bg-playdamnit-purple transition-colors">
+            <Pencil size={12} />
           </div>
           {onDeleteClick && (
             <div
-              className="bg-red-500/80 text-white p-1 rounded-full cursor-pointer"
+              className="bg-red-500/90 text-white p-2 rounded-full cursor-pointer hover:bg-red-500 transition-colors"
               onClick={handleDelete}
             >
-              <Trash2 size={14} />
+              <Trash2 size={12} />
             </div>
           )}
         </div>
       )}
+
       <div className="p-4">
-        <div className="flex gap-6">
-          {/* Game Cover */}
-          <div className="w-24 h-32 rounded-lg overflow-hidden bg-playdamnit-dark/50 flex-shrink-0">
-            {game.cover ? (
+        <div className="flex items-center gap-4">
+          {/* Game Cover - Smaller */}
+          <div className="w-16 h-20 rounded-lg overflow-hidden bg-playdamnit-dark/50 flex-shrink-0 shadow-md">
+            {coverUrl ? (
               <img
-                src={
-                  game.cover?.url?.startsWith("//")
-                    ? `https:${game.cover.url.replace("t_thumb", "t_cover_big")}`
-                    : game.cover?.url?.replace("t_thumb", "t_cover_big")
-                }
+                src={coverUrl}
                 alt={game.name}
                 className="w-full h-full object-cover"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-playdamnit-light/30">
-                <Gamepad2 className="w-10 h-10" />
+                <Gamepad2 className="w-6 h-6" />
               </div>
             )}
           </div>
 
-          {/* Game Info */}
-          <div className="flex-1 min-w-0 flex flex-col">
-            <div className="flex justify-between items-start gap-2">
-              <div>
-                <h3 className="font-bold text-lg text-playdamnit-light group-hover:text-playdamnit-cyan transition-colors">
+          {/* Main Info - Flexible */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1 min-w-0">
+                <h3 className="font-bold text-lg text-playdamnit-light group-hover:text-playdamnit-cyan transition-colors truncate mb-1">
                   {game.name}
                 </h3>
-                <div className="mt-1 text-sm text-playdamnit-light/60 flex items-center gap-2">
-                  <span>{game.platforms?.[0]?.name}</span>
-                  {/* <span className="text-playdamnit-light/20">•</span> */}
-                  {/* <span>{game.dateAdded}</span> */}
+                <div className="flex items-center gap-3 text-sm text-playdamnit-light/60">
+                  <span>{platformDisplay}</span>
+                  {releaseYear && (
+                    <>
+                      <span className="text-playdamnit-light/20">•</span>
+                      <span>{releaseYear}</span>
+                    </>
+                  )}
+                  {game.totalRating && (
+                    <>
+                      <span className="text-playdamnit-light/20">•</span>
+                      <div className="flex items-center gap-1">
+                        <TrendingUp className="w-3 h-3" />
+                        <span>{(game.totalRating / 10).toFixed(1)}</span>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
-              <div className="flex flex-col items-end gap-2">
-                <Badge
-                  className={`${getStatusColor(game.userGameData?.status)} text-xs`}
-                >
-                  {game.userGameData?.status}
-                </Badge>
-                {game.userGameData?.rating && game.userGameData?.rating > 0 && (
+
+              {/* Status & Rating Analytics */}
+              <div className="flex items-center gap-4 flex-shrink-0">
+                {/* Status */}
+                <div className="text-center">
                   <Badge
-                    className={`${getRatingColor(
-                      game.userGameData?.rating
-                    )} text-xs px-2 py-1 font-medium`}
+                    variant="outline"
+                    className={`${statusInfo.color} text-xs font-medium px-2 py-1`}
                   >
-                    {formatRating(game.userGameData?.rating)}
+                    {statusInfo.icon} {statusInfo.label}
                   </Badge>
+                  {shouldShowEndedDate(
+                    game.userGameData?.status,
+                    game.userGameData?.endedAt
+                  ) && (
+                    <div className="text-xs text-playdamnit-light/50 mt-1">
+                      {formatEndedDate(game.userGameData.endedAt!)}
+                    </div>
+                  )}
+                </div>
+
+                {/* Rating */}
+                {rating > 0 && (
+                  <div className="text-center">
+                    <div className="flex items-center gap-1 justify-center">
+                      <Star className={`w-4 h-4 ${getRatingColor(rating)}`} />
+                      <span
+                        className={`text-lg font-bold ${getRatingColor(rating)}`}
+                      >
+                        {formatRating(rating)}
+                      </span>
+                    </div>
+                    <div className="text-xs text-playdamnit-light/50">
+                      Your Score
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
 
-            <div className="mt-auto pt-3 flex flex-wrap gap-2">
-              {game.genres &&
-                game.genres.map((genre) => (
-                  <span
-                    key={genre.id}
-                    className="px-2 py-0.5 bg-playdamnit-dark/50 rounded-full text-xs text-playdamnit-light/60"
-                  >
-                    {genre.name}
-                  </span>
-                ))}
-            </div>
-
-            {/* Game Stats */}
-            {/* <div className="mt-4 pt-3 border-t border-playdamnit-purple/5 flex gap-6 text-xs">
-              {game.playtime !== undefined && (
-                <div className="flex items-center gap-1.5 text-playdamnit-light/60">
-                  <Clock className="w-3 h-3 text-playdamnit-cyan" />
-                  <span>{game.playtime}h played</span>
-                </div>
-              )}
-              {game.achievements && (
-                <div className="flex items-center gap-1.5 text-playdamnit-light/60">
-                  <Trophy className="w-3 h-3 text-playdamnit-cyan" />
-                  <span>
-                    {game.achievements.completed}/{game.achievements.total}{" "}
-                    achievements
-                  </span>
-                </div>
-              )}
-              <div className="flex items-center gap-1.5 text-playdamnit-light/60 ml-auto">
-                <span className="text-xs uppercase font-medium px-2 py-0.5 bg-playdamnit-dark/50 rounded-full">
-                  {game.source}
+            {/* Genres - Compact */}
+            <div className="flex flex-wrap gap-1 mt-2">
+              {game.genres?.slice(0, 3).map((genre) => (
+                <span
+                  key={genre.id}
+                  className="px-2 py-0.5 bg-playdamnit-purple/10 border border-playdamnit-purple/20 rounded-full text-xs text-playdamnit-light/70"
+                >
+                  {genre.name}
                 </span>
-              </div>
-            </div> */}
+              ))}
+              {game.genres && game.genres.length > 3 && (
+                <span className="px-2 py-0.5 bg-playdamnit-purple/10 border border-playdamnit-purple/20 rounded-full text-xs text-playdamnit-light/70">
+                  +{game.genres.length - 3}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </div>

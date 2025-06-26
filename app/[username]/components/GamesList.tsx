@@ -1,14 +1,14 @@
 "use client";
 
 import { GameCard } from "./GameCard";
-import { Game } from "@playdamnit/api-client";
+import { Game, UserGameWithUserData } from "@playdamnit/api-client";
 
 interface GamesListProps {
-  games: Game[];
+  games: UserGameWithUserData[];
   isOwnProfile: boolean;
   viewMode: "grid" | "row";
-  onGameClick: (game: Game) => void;
-  onDeleteClick?: (game: Game) => void;
+  onGameClick: (game: UserGameWithUserData) => void;
+  onDeleteClick?: (game: UserGameWithUserData) => void;
 }
 
 export function GamesList({
@@ -32,25 +32,38 @@ export function GamesList({
   }
 
   // Group games by year
-  const groupedGames = games.reduce<Record<string, Game[]>>((acc, game) => {
-    // Get year from firstReleaseDate (Unix timestamp in milliseconds) or addedAt (ISO string)
-    let year = "Unknown Year";
+  const groupedGames = games.reduce<Record<string, UserGameWithUserData[]>>(
+    (acc, game) => {
+      // Get year based on game status and available dates
+      let year = "Unknown Year";
 
-    if (game.firstReleaseDate) {
-      // Convert Unix timestamp to year
-      year = new Date(game.firstReleaseDate * 1000).getFullYear().toString();
-    } else if (game.userGameData?.addedAt) {
-      // Extract year from ISO date string
-      year = new Date(game.userGameData.addedAt).getFullYear().toString();
-    }
+      // For finished or dropped games, prioritize endedAt (when user finished/dropped the game)
+      if (
+        (game.userGameData?.status === "finished" ||
+          game.userGameData?.status === "dropped") &&
+        game.userGameData?.endedAt
+      ) {
+        year = new Date(game.userGameData.endedAt).getFullYear().toString();
+      }
+      // Fall back to when the game was added to the user's library
+      else if (game.userGameData?.addedAt) {
+        year = new Date(game.userGameData.addedAt).getFullYear().toString();
+      }
+      // Final fallback to the game's original release date
+      else if (game.firstReleaseDate) {
+        // Convert Unix timestamp to year
+        year = new Date(game.firstReleaseDate * 1000).getFullYear().toString();
+      }
 
-    if (!acc[year]) {
-      acc[year] = [];
-    }
+      if (!acc[year]) {
+        acc[year] = [];
+      }
 
-    acc[year].push(game);
-    return acc;
-  }, {});
+      acc[year].push(game);
+      return acc;
+    },
+    {}
+  );
 
   // Sort years in descending order (newest first)
   const sortedYears = Object.keys(groupedGames).sort((a, b) => {
@@ -59,9 +72,38 @@ export function GamesList({
     return parseInt(b) - parseInt(a);
   });
 
-  // Sort games within each year by name
+  // Sort games within each year chronologically (newest first)
   sortedYears.forEach((year) => {
-    groupedGames[year].sort((a, b) => a.name.localeCompare(b.name));
+    groupedGames[year].sort((a, b) => {
+      // Helper function to get the primary date for sorting
+      const getDateForSorting = (game: UserGameWithUserData): Date => {
+        // For finished or dropped games, prioritize endedAt
+        if (
+          (game.userGameData?.status === "finished" ||
+            game.userGameData?.status === "dropped") &&
+          game.userGameData?.endedAt
+        ) {
+          return new Date(game.userGameData.endedAt);
+        }
+        // Fall back to when the game was added to the user's library
+        else if (game.userGameData?.addedAt) {
+          return new Date(game.userGameData.addedAt);
+        }
+        // Final fallback to the game's original release date
+        else if (game.firstReleaseDate) {
+          return new Date(game.firstReleaseDate * 1000);
+        }
+        // If no date available, use a very old date to sort to the end
+        return new Date(0);
+      };
+
+      const dateA = getDateForSorting(a);
+      const dateB = getDateForSorting(b);
+
+      // Sort by date descending (newest first), then by name if dates are equal
+      const dateDiff = dateB.getTime() - dateA.getTime();
+      return dateDiff !== 0 ? dateDiff : a.name.localeCompare(b.name);
+    });
   });
 
   if (viewMode === "grid") {
@@ -72,7 +114,7 @@ export function GamesList({
             <h2 className="text-xl font-bold text-playdamnit-light mb-4 border-b border-playdamnit-purple/20 pb-2">
               {year}
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
               {groupedGames[year].map((game) => (
                 <GameCard
                   key={game.id}

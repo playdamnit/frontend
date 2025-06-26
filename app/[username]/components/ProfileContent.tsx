@@ -9,9 +9,11 @@ import { ProfileTabs } from "./ProfileTabs";
 import { SearchAndFilter } from "./SearchAndFilter";
 import { GamesList } from "./GamesList";
 import AddGameModal from "@/components/add-game-modal";
+import UpdateGameModal from "@/components/update-game-modal";
 import SearchModal from "@/components/search/search-modal";
 import {
   Game,
+  UserGameWithUserData,
   getGetApiUserByUsernameGamesQueryKey,
   useGetApiUserByUsernameGames,
   useDeleteApiUserByUsernameGamesById,
@@ -33,8 +35,12 @@ export const ProfileContent = ({
   const [activeTab, setActiveTab] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "row">("row");
-  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedGame, setSelectedGame] = useState<UserGameWithUserData | null>(
+    null
+  );
+  const [selectedNewGame, setSelectedNewGame] = useState<Game | null>(null);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const { data: userGames, isLoading } = useGetApiUserByUsernameGames(username);
   const deleteGameMutation = useDeleteApiUserByUsernameGamesById();
@@ -195,7 +201,7 @@ export const ProfileContent = ({
     return matchesTab && matchesSearch;
   });
 
-  const handleGameClick = (game: Game) => {
+  const handleGameClick = (game: UserGameWithUserData) => {
     if (!isOwnProfile) return;
 
     // const gameForModal: Game & {
@@ -222,24 +228,47 @@ export const ProfileContent = ({
     // };
 
     setSelectedGame(game);
-    setIsModalOpen(true);
+    setIsUpdateModalOpen(true);
   };
 
-  const handleModalClose = () => {
-    setIsModalOpen(false);
+  const handleUpdateModalClose = () => {
+    setIsUpdateModalOpen(false);
     setSelectedGame(null);
   };
 
-  const handleModalSuccess = () => {
-    setIsModalOpen(false);
+  const handleUpdateModalSuccess = () => {
+    setIsUpdateModalOpen(false);
     setSelectedGame(null);
+  };
+
+  const handleAddModalClose = () => {
+    setIsAddModalOpen(false);
+    setSelectedNewGame(null);
+  };
+
+  const handleAddModalSuccess = () => {
+    setIsAddModalOpen(false);
+    setSelectedNewGame(null);
+  };
+
+  const handleBackToSearch = () => {
+    setIsAddModalOpen(false);
+    setSelectedNewGame(null);
+    setIsSearchModalOpen(true);
   };
 
   const handleSearchModalOpen = () => {
     setIsSearchModalOpen(true);
   };
 
-  const handleDeleteGame = (game: Game) => {
+  const handleSearchGameSelect = (game: Game) => {
+    // Close search modal and open add modal with selected game
+    setIsSearchModalOpen(false);
+    setSelectedNewGame(game);
+    setIsAddModalOpen(true);
+  };
+
+  const handleDeleteGame = (game: UserGameWithUserData) => {
     if (!isOwnProfile) return;
     console.log("game", game);
     if (
@@ -324,14 +353,24 @@ export const ProfileContent = ({
           onDeleteClick={isOwnProfile ? handleDeleteGame : undefined}
         />
 
-        {/* Add Game Modal */}
+        {/* Update Game Modal */}
         {selectedGame && (
-          <AddGameModal
-            isOpen={isModalOpen}
-            onClose={handleModalClose}
-            onSuccess={handleModalSuccess}
+          <UpdateGameModal
+            isOpen={isUpdateModalOpen}
+            onClose={handleUpdateModalClose}
+            onSuccess={handleUpdateModalSuccess}
             game={selectedGame}
-            isEditing={true}
+          />
+        )}
+
+        {/* Add Game Modal */}
+        {selectedNewGame && (
+          <AddGameModal
+            isOpen={isAddModalOpen}
+            onClose={handleAddModalClose}
+            onSuccess={handleAddModalSuccess}
+            onBackToSearch={handleBackToSearch}
+            game={selectedNewGame}
           />
         )}
 
@@ -339,11 +378,7 @@ export const ProfileContent = ({
         <SearchModal
           isOpen={isSearchModalOpen}
           onClose={() => setIsSearchModalOpen(false)}
-          onGameSelect={(game: Game) => {
-            setSelectedGame(game);
-            setIsModalOpen(true);
-            setIsSearchModalOpen(false);
-          }}
+          onGameSelect={handleSearchGameSelect}
         />
       </div>
     </div>

@@ -1,32 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Search,
-  Loader2,
-  ArrowLeft,
-  Star,
-  Calendar,
-  Plus,
-  Gamepad,
-} from "lucide-react";
+import { Search, Star, Calendar, Plus, Gamepad2 } from "lucide-react";
 import { Game, useGetApiGamesSearch } from "@playdamnit/api-client";
-import AddGameModal from "../add-game-modal";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
-import { Logo } from "../ui/logo";
-
-// Custom scrollbar styles
-const scrollbarStyles = `
-  scrollbar-thin
-  scrollbar-thumb-playdamnit-purple/40
-  scrollbar-track-playdamnit-dark
-  hover:scrollbar-thumb-playdamnit-purple/60
-  scrollbar-thumb-rounded-full
-  scrollbar-track-rounded-full
-  overflow-y-auto
-  overflow-x-hidden
-`;
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -40,299 +23,192 @@ export default function SearchModal({
   onGameSelect,
 }: SearchModalProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
 
   const { data: searchResults, isLoading } = useGetApiGamesSearch(
-    {
-      q: searchQuery,
-    },
+    { q: searchQuery },
     {
       query: {
         enabled: searchQuery.length > 2,
+        queryKey: ["games", "search", searchQuery],
       },
     }
   );
 
   const handleGameSelect = (game: Game) => {
-    setSelectedGame(game);
-    // If onGameSelect is provided, call it with the selected game
     if (onGameSelect) {
       onGameSelect(game);
     }
-    // We don't need to open another modal, just update the selected game
   };
 
-  const handleGameAdded = () => {
-    setSelectedGame(null);
+  const handleClose = () => {
+    setSearchQuery("");
     onClose();
   };
 
-  const handleBackToSearch = () => {
-    setSelectedGame(null);
-  };
-
-  // Determine which content to show based on whether a game is selected
-  const showSearchContent = !selectedGame;
-
-  // Custom gamepad icon for platforms
-  const PlatformIcon = () => (
-    <Gamepad size={14} className="text-playdamnit-cyan mr-1" />
-  );
-
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={(open) => {
-        if (!open) {
-          // Reset state when closing
-          setSelectedGame(null);
-          setSearchQuery("");
-          onClose();
-        }
-      }}
-    >
-      <DialogContent className="bg-playdamnit-darker border border-playdamnit-purple/20 text-white max-w-2xl p-0 overflow-hidden">
-        {/* Gradient accent line at top */}
-        <div className="h-1 w-full bg-gradient-to-r from-playdamnit-purple via-playdamnit-cyan to-playdamnit-purple"></div>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent className="bg-playdamnit-dark border-playdamnit-purple/30 text-playdamnit-light max-w-2xl h-[80vh] overflow-hidden flex flex-col">
+        {/* Header */}
+        <DialogHeader className="px-6 pt-6 pb-0 flex-shrink-0">
+          <DialogTitle className="text-xl font-bold text-playdamnit-light flex items-center gap-2">
+            <Search className="w-5 h-5 text-playdamnit-cyan" />
+            Add Game to Library
+          </DialogTitle>
+        </DialogHeader>
 
-        {showSearchContent ? (
-          <div className="p-6 space-y-6">
-            <DialogTitle className="text-xl font-bold text-white flex items-center">
-              <Logo size={24} />
-              <span className="ml-2">Search Games</span>
-            </DialogTitle>
-
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search games..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-lg border border-playdamnit-purple/20 bg-playdamnit-dark py-4 pl-12 pr-4 text-white placeholder-gray-400 focus:border-playdamnit-purple focus:outline-none focus:ring-1 focus:ring-playdamnit-purple text-lg"
-                autoFocus
-              />
-            </div>
-
-            <div
-              className={cn(
-                "space-y-4 max-h-[60vh] overflow-y-auto pr-2",
-                scrollbarStyles
-              )}
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(147, 51, 234, 0.4) #1a1a1a",
-              }}
-            >
-              {isLoading ? (
-                <div className="grid grid-cols-1 gap-4">
-                  {[1, 2, 3].map((i) => (
-                    <div
-                      key={i}
-                      className="relative overflow-hidden rounded-xl bg-playdamnit-dark border border-playdamnit-purple/10 animate-pulse"
-                    >
-                      <div className="flex">
-                        {/* Skeleton for game cover */}
-                        <div className="relative w-[100px] h-[140px] flex-shrink-0 bg-playdamnit-purple/5 overflow-hidden">
-                          {/* Shimmer effect */}
-                          <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
-
-                          {/* Rating skeleton */}
-                          <div className="absolute bottom-2 left-2 bg-playdamnit-darker/50 rounded-full w-12 h-5"></div>
-                        </div>
-
-                        {/* Skeleton for game details */}
-                        <div className="flex-1 p-4 flex flex-col justify-between">
-                          <div>
-                            <div className="relative h-6 bg-playdamnit-purple/5 rounded w-3/4 mb-4 overflow-hidden">
-                              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
-                            </div>
-                            <div className="relative h-4 bg-playdamnit-purple/5 rounded w-1/2 mb-2 overflow-hidden">
-                              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
-                            </div>
-                            <div className="flex gap-2 mt-3">
-                              <div className="relative h-6 bg-playdamnit-purple/5 rounded-full w-16 overflow-hidden">
-                                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
-                              </div>
-                              <div className="relative h-6 bg-playdamnit-purple/5 rounded-full w-16 overflow-hidden">
-                                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
-                              </div>
-                              <div className="relative h-6 bg-playdamnit-purple/5 rounded-full w-10 overflow-hidden">
-                                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="flex gap-4 mt-4">
-                            <div className="relative h-4 bg-playdamnit-purple/5 rounded w-20 flex items-center overflow-hidden">
-                              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
-                              <div className="w-3 h-3 mr-1 bg-playdamnit-purple/10 rounded-full z-10"></div>
-                              <div className="flex-1 bg-playdamnit-purple/5 h-3 rounded z-10"></div>
-                            </div>
-                            <div className="relative h-4 bg-playdamnit-purple/5 rounded w-32 flex items-center overflow-hidden">
-                              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
-                              <div className="w-3 h-3 mr-1 bg-playdamnit-purple/10 rounded-full z-10"></div>
-                              <div className="flex-1 bg-playdamnit-purple/5 h-3 rounded z-10"></div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Add button skeleton */}
-                        <div className="absolute right-4 top-4">
-                          <div className="relative w-8 h-8 rounded-full bg-playdamnit-purple/10 overflow-hidden">
-                            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-playdamnit-purple/10 to-transparent animate-shimmer"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : searchResults?.data &&
-                searchResults?.data?.results?.length > 0 ? (
-                <div className="grid grid-cols-1 gap-4">
-                  {searchResults.data.results.map((game) => (
-                    <div
-                      key={game.id}
-                      className="group relative overflow-hidden rounded-xl bg-playdamnit-dark border border-playdamnit-purple/20 hover:border-playdamnit-purple/50 transition-all duration-300 cursor-pointer"
-                      onClick={() => handleGameSelect(game)}
-                    >
-                      <div className="flex">
-                        {/* Game cover with gradient overlay */}
-                        <div className="relative w-[100px] h-[140px] flex-shrink-0">
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-playdamnit-dark/30 z-10" />
-                          <img
-                            src={game.cover?.url || "/placeholder.svg"}
-                            alt={game.name}
-                            className="h-full w-full object-cover"
-                          />
-                          {game.totalRating && (
-                            <div className="absolute bottom-2 left-2 bg-playdamnit-darker/80 rounded-full px-2 py-1 flex items-center z-20">
-                              <Star className="h-3 w-3 text-playdamnit-cyan mr-1" />
-                              <span className="text-xs font-medium">
-                                {(game.totalRating / 10).toFixed(1)}
-                              </span>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Game details */}
-                        <div className="flex-1 p-4 flex flex-col justify-between">
-                          <div>
-                            <h3 className="text-xl font-bold text-white mb-2 group-hover:text-playdamnit-cyan transition-colors line-clamp-2 pr-10">
-                              {game.name}
-                            </h3>
-
-                            {/* Game metadata with icons */}
-                            <div className="space-y-2">
-                              {game.genres && game.genres.length > 0 && (
-                                <div className="flex flex-wrap gap-2">
-                                  {game.genres.slice(0, 2).map((genre) => (
-                                    <span
-                                      key={genre.id}
-                                      className="bg-playdamnit-purple/20 rounded-full px-3 py-1 text-xs text-playdamnit-light/70"
-                                    >
-                                      {genre.name}
-                                    </span>
-                                  ))}
-                                  {game.genres.length > 2 && (
-                                    <span className="bg-playdamnit-purple/20 rounded-full px-3 py-1 text-xs text-playdamnit-light/70">
-                                      +{game.genres.length - 2}
-                                    </span>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-
-                          <div className="flex flex-wrap items-center mt-3 text-sm text-playdamnit-light/70 gap-4">
-                            {game.firstReleaseDate && (
-                              <div className="flex items-center">
-                                <Calendar className="h-3.5 w-3.5 mr-1 text-playdamnit-cyan" />
-                                <span>
-                                  {new Date(
-                                    game.firstReleaseDate * 1000
-                                  ).getFullYear()}
-                                </span>
-                              </div>
-                            )}
-
-                            {game.platforms && game.platforms.length > 0 && (
-                              <div className="flex items-center">
-                                <PlatformIcon />
-                                <span className="truncate max-w-[150px]">
-                                  {game.platforms.length > 2
-                                    ? `${game.platforms[0].name} +${
-                                        game.platforms.length - 1
-                                      }`
-                                    : game.platforms
-                                        .map((p) => p.name)
-                                        .join(", ")}
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Add button */}
-                        <div
-                          className="absolute right-4 top-4 z-20 opacity-80 group-hover:opacity-100 transition-all duration-300"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleGameSelect(game);
-                          }}
-                        >
-                          <div className="w-8 h-8 rounded-full bg-playdamnit-purple/30 flex items-center justify-center hover:bg-playdamnit-purple hover:scale-110 transition-all duration-300">
-                            <Plus className="h-5 w-5 text-playdamnit-cyan" />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Hover effect - gradient line at bottom */}
-                      <div className="h-1 w-0 group-hover:w-full bg-gradient-to-r from-playdamnit-purple via-playdamnit-cyan to-playdamnit-purple absolute bottom-0 left-0 transition-all duration-500"></div>
-                    </div>
-                  ))}
-                </div>
-              ) : searchQuery.length > 2 ? (
-                <div className="text-center py-8 text-gray-400">
-                  <p>No games found</p>
-                  <p className="text-sm mt-2">Try a different search term</p>
-                </div>
-              ) : searchQuery.length > 0 ? (
-                <div className="text-center py-8 text-gray-400">
-                  <p>Type at least 3 characters to search</p>
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-playdamnit-purple/20 flex items-center justify-center">
-                    <Search className="h-8 w-8 text-playdamnit-cyan" />
-                  </div>
-                  <p className="text-playdamnit-light/70">
-                    Start typing to search for games
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        ) : (
+        {/* Search Input */}
+        <div className="px-6 pt-6 flex-shrink-0">
           <div className="relative">
-            {/* Back button */}
-            <button
-              onClick={handleBackToSearch}
-              className="absolute left-0 top-0 z-20 flex items-center text-playdamnit-light/70 hover:text-playdamnit-cyan transition-colors bg-playdamnit-darker/90 px-3 py-2 rounded-tr-lg rounded-bl-lg"
-            >
-              <ArrowLeft className="h-5 w-5 mr-1" />
-              <span>Back to search</span>
-            </button>
-
-            {/* If a game is selected, render the AddGameModal content directly */}
-            <AddGameModal
-              isOpen={true}
-              onClose={() => setSelectedGame(null)}
-              game={selectedGame}
-              isEmbedded={true}
+            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-playdamnit-light/40" />
+            <input
+              type="text"
+              placeholder="Search for games..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full rounded-lg border border-playdamnit-purple/30 bg-playdamnit-dark py-3 pl-10 pr-4 text-playdamnit-light placeholder-playdamnit-light/40 focus:border-playdamnit-cyan focus:outline-none focus:ring-1 focus:ring-playdamnit-cyan transition-colors"
+              autoFocus
             />
           </div>
-        )}
+        </div>
+
+        {/* Scrollable Results */}
+        <div className="px-6 pb-6 pt-4 overflow-y-auto flex-1 min-h-0">
+          {isLoading ? (
+            <div className="space-y-3">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="flex gap-4 p-4 bg-playdamnit-dark/50 border border-playdamnit-purple/20 rounded-lg animate-pulse"
+                >
+                  <div className="w-16 h-20 bg-playdamnit-purple/20 rounded-lg flex-shrink-0" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-5 bg-playdamnit-purple/20 rounded w-3/4" />
+                    <div className="h-4 bg-playdamnit-purple/20 rounded w-1/2" />
+                    <div className="flex gap-2">
+                      <div className="h-6 bg-playdamnit-purple/20 rounded-full w-16" />
+                      <div className="h-6 bg-playdamnit-purple/20 rounded-full w-16" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : searchResults?.data?.results &&
+            searchResults.data.results.length > 0 ? (
+            <div className="space-y-3">
+              {searchResults.data.results.map((game) => (
+                <div
+                  key={game.id}
+                  onClick={() => handleGameSelect(game)}
+                  className="group flex gap-4 p-4 bg-playdamnit-dark/30 border border-playdamnit-purple/20 rounded-lg hover:border-playdamnit-cyan/50 hover:bg-playdamnit-dark/50 transition-all duration-200 cursor-pointer"
+                >
+                  {/* Game Cover */}
+                  <div className="relative w-16 h-20 rounded-lg overflow-hidden bg-playdamnit-dark flex-shrink-0">
+                    {game.cover?.url ? (
+                      <img
+                        src={game.cover.url.replace("t_thumb", "t_cover_big")}
+                        alt={game.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-playdamnit-light/30">
+                        <Gamepad2 className="w-6 h-6" />
+                      </div>
+                    )}
+                    {game.totalRating && (
+                      <div className="absolute bottom-1 left-1 bg-playdamnit-dark/80 rounded px-1 py-0.5 flex items-center">
+                        <Star className="w-2.5 h-2.5 text-playdamnit-cyan mr-0.5" />
+                        <span className="text-xs text-playdamnit-light">
+                          {(game.totalRating / 10).toFixed(1)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Game Info */}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-playdamnit-light group-hover:text-playdamnit-cyan transition-colors line-clamp-1 mb-1">
+                      {game.name}
+                    </h3>
+
+                    <div className="flex items-center gap-3 text-sm text-playdamnit-light/60 mb-2">
+                      {game.firstReleaseDate && (
+                        <div className="flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          <span>
+                            {new Date(
+                              game.firstReleaseDate * 1000
+                            ).getFullYear()}
+                          </span>
+                        </div>
+                      )}
+                      {game.platforms?.[0] && (
+                        <div className="flex items-center gap-1">
+                          <Gamepad2 className="w-3 h-3" />
+                          <span className="truncate">
+                            {game.platforms[0].name}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-wrap gap-1">
+                      {game.genres?.slice(0, 3).map((genre) => (
+                        <Badge
+                          key={genre.id}
+                          variant="outline"
+                          className="text-xs bg-playdamnit-purple/10 border-playdamnit-purple/30 text-playdamnit-light/70"
+                        >
+                          {genre.name}
+                        </Badge>
+                      ))}
+                      {game.genres && game.genres.length > 3 && (
+                        <Badge
+                          variant="outline"
+                          className="text-xs bg-playdamnit-purple/10 border-playdamnit-purple/30 text-playdamnit-light/70"
+                        >
+                          +{game.genres.length - 3}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Add Button */}
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 rounded-full bg-playdamnit-cyan/20 group-hover:bg-playdamnit-cyan group-hover:scale-110 flex items-center justify-center transition-all duration-200">
+                      <Plus className="w-4 h-4 text-playdamnit-cyan group-hover:text-playdamnit-dark" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : searchQuery.length > 2 ? (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-playdamnit-purple/10 flex items-center justify-center">
+                <Search className="w-8 h-8 text-playdamnit-light/40" />
+              </div>
+              <p className="text-playdamnit-light/60 mb-2">No games found</p>
+              <p className="text-sm text-playdamnit-light/40">
+                Try a different search term
+              </p>
+            </div>
+          ) : searchQuery.length > 0 ? (
+            <div className="text-center py-8 text-playdamnit-light/60">
+              <p>Type at least 3 characters to search</p>
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-playdamnit-cyan/10 flex items-center justify-center">
+                <Search className="w-8 h-8 text-playdamnit-cyan" />
+              </div>
+              <p className="text-playdamnit-light/70 mb-2">
+                Search for games to add
+              </p>
+              <p className="text-sm text-playdamnit-light/40">
+                Start typing to find games in our database
+              </p>
+            </div>
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );
