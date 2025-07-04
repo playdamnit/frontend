@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { GameSearchResult } from "@/utils/types/game";
+import { Game } from "@playdamnit/api-client";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Check, PlusCircle } from "lucide-react";
 
 interface GameResultsListProps {
-  games: GameSearchResult[];
-  onSelectGame: (game: GameSearchResult) => void;
+  games: Game[];
+  onSelectGame: (game: Game) => void;
   className?: string;
 }
 
@@ -21,7 +21,7 @@ export default function GameResultsList({
 
   if (!games || games.length === 0) return null;
 
-  const handleSelectGame = (game: GameSearchResult) => {
+  const handleSelectGame = (game: Game) => {
     setSelectedGameId(game.id);
     onSelectGame(game);
   };

@@ -8,9 +8,8 @@ import { ProfileHeader } from "./ProfileHeader";
 import { ProfileTabs } from "./ProfileTabs";
 import { SearchAndFilter } from "./SearchAndFilter";
 import { GamesList } from "./GamesList";
-import AddGameModal from "@/components/add-game-modal";
-import UpdateGameModal from "@/components/update-game-modal";
-import SearchModal from "@/components/search/search-modal";
+import GameModal from "@/components/game-modal";
+import SearchAndAddModal from "@/components/search-and-add-modal";
 import {
   Game,
   UserGameWithUserData,
@@ -38,10 +37,8 @@ export const ProfileContent = ({
   const [selectedGame, setSelectedGame] = useState<UserGameWithUserData | null>(
     null
   );
-  const [selectedNewGame, setSelectedNewGame] = useState<Game | null>(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [isSearchAndAddModalOpen, setIsSearchAndAddModalOpen] = useState(false);
   const { data: userGames, isLoading } = useGetApiUserByUsernameGames(username);
   const deleteGameMutation = useDeleteApiUserByUsernameGamesById();
 
@@ -241,31 +238,20 @@ export const ProfileContent = ({
     setSelectedGame(null);
   };
 
-  const handleAddModalClose = () => {
-    setIsAddModalOpen(false);
-    setSelectedNewGame(null);
+  const handleSearchAndAddModalOpen = () => {
+    setIsSearchAndAddModalOpen(true);
   };
 
-  const handleAddModalSuccess = () => {
-    setIsAddModalOpen(false);
-    setSelectedNewGame(null);
+  const handleSearchAndAddModalClose = () => {
+    setIsSearchAndAddModalOpen(false);
   };
 
-  const handleBackToSearch = () => {
-    setIsAddModalOpen(false);
-    setSelectedNewGame(null);
-    setIsSearchModalOpen(true);
-  };
-
-  const handleSearchModalOpen = () => {
-    setIsSearchModalOpen(true);
-  };
-
-  const handleSearchGameSelect = (game: Game) => {
-    // Close search modal and open add modal with selected game
-    setIsSearchModalOpen(false);
-    setSelectedNewGame(game);
-    setIsAddModalOpen(true);
+  const handleSearchAndAddModalSuccess = () => {
+    setIsSearchAndAddModalOpen(false);
+    // Invalidate queries to refresh the games list
+    queryClient.invalidateQueries({
+      queryKey: getGetApiUserByUsernameGamesQueryKey(username),
+    });
   };
 
   const handleDeleteGame = (game: UserGameWithUserData) => {
@@ -320,7 +306,7 @@ export const ProfileContent = ({
               ? `data:image/png;base64,${avatarUrl}`
               : avatarUrl
           }
-          onAddGameClick={handleSearchModalOpen}
+          onAddGameClick={handleSearchAndAddModalOpen}
         />
 
         {/* <StatsCards
@@ -355,30 +341,20 @@ export const ProfileContent = ({
 
         {/* Update Game Modal */}
         {selectedGame && (
-          <UpdateGameModal
+          <GameModal
             isOpen={isUpdateModalOpen}
             onClose={handleUpdateModalClose}
             onSuccess={handleUpdateModalSuccess}
+            mode="update"
             game={selectedGame}
           />
         )}
 
-        {/* Add Game Modal */}
-        {selectedNewGame && (
-          <AddGameModal
-            isOpen={isAddModalOpen}
-            onClose={handleAddModalClose}
-            onSuccess={handleAddModalSuccess}
-            onBackToSearch={handleBackToSearch}
-            game={selectedNewGame}
-          />
-        )}
-
-        {/* Game Search Modal */}
-        <SearchModal
-          isOpen={isSearchModalOpen}
-          onClose={() => setIsSearchModalOpen(false)}
-          onGameSelect={handleSearchGameSelect}
+        {/* Search and Add Modal */}
+        <SearchAndAddModal
+          isOpen={isSearchAndAddModalOpen}
+          onClose={handleSearchAndAddModalClose}
+          onSuccess={handleSearchAndAddModalSuccess}
         />
       </div>
     </div>

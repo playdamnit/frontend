@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { Star, PlusCircle, CheckCircle2 } from "lucide-react";
 import { format } from "date-fns";
-import { GameSearchResult } from "@/utils/types/game";
-import AddGameModal from "@/components/add-game-modal";
+import { Game } from "@playdamnit/api-client";
+import GameModal from "@/components/game-modal";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
 interface GameResultProps {
-  game: GameSearchResult & {
+  game: Game & {
     userRating?: number;
     userStatus?: string;
     userReview?: string;
@@ -176,11 +176,11 @@ export default function GameResult({ game, className }: GameResultProps) {
         </div>
       </motion.div>
 
-      {/* Add Game Modal */}
-      <AddGameModal
+      <GameModal
         isOpen={isAddModalOpen}
         onClose={handleCloseAddModal}
         onSuccess={handleSuccess}
+        mode="add"
         game={game}
         isEmbedded={true}
       />

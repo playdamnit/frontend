@@ -2,21 +2,17 @@
 
 import type React from "react";
 import { useState, useMemo, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Star, Calendar, GamepadIcon, Loader2 } from "lucide-react";
+import { Calendar, GamepadIcon, Loader2 } from "lucide-react";
 import {
   Game,
+  UserGameWithUserData,
   usePostApiUserByUsernameGames,
+  usePatchApiUserByUsernameGamesById,
   useGetApiMe,
   getGetApiUserByUsernameGamesQueryKey,
   getGetApiUserByUsernameQueryKey,
@@ -24,23 +20,24 @@ import {
 } from "@playdamnit/api-client";
 import { useQueryClient } from "@tanstack/react-query";
 
-interface CreateGameModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+type GameFormMode = "add" | "update";
+type GameData = Game | UserGameWithUserData;
+
+interface GameFormProps {
+  mode: GameFormMode;
+  game: GameData;
   onSuccess: () => void;
-  game: Game;
-  isEmbedded?: boolean;
+  onCancel: () => void;
   onBackToSearch?: () => void;
 }
 
-export default function CreateGameModal({
-  isOpen,
-  onClose,
-  onSuccess,
+export default function GameForm({
+  mode,
   game,
-  isEmbedded = false,
+  onSuccess,
+  onCancel,
   onBackToSearch,
-}: CreateGameModalProps) {
+}: GameFormProps) {
   const [status, setStatus] = useState<
     "Finished" | "Playing" | "Dropped" | "Want"
   >("Want");
@@ -50,11 +47,50 @@ export default function CreateGameModal({
   const { data: me } = useGetApiMe();
   const queryClient = useQueryClient();
 
-  // Use the API hook
   const addGameMutation = usePostApiUserByUsernameGames();
+  const updateGameMutation = usePatchApiUserByUsernameGamesById();
 
-  // Determine if we're in a submitting state
-  const isSubmitting = addGameMutation.isPending;
+  const isSubmitting = mode === "add" 
+    ? addGameMutation.isPending 
+    : updateGameMutation.isPending;
+
+  // Initialize with existing data for update mode
+  useEffect(() => {
+    if (mode === "update" && game) {
+      const userGame = game as UserGameWithUserData;
+      
+      // Try to extract status from game data if available
+      if (userGame.userGameData?.status) {
+        const statusMap: Record<
+          string,
+          "Finished" | "Playing" | "Dropped" | "Want"
+        > = {
+          finished: "Finished",
+          playing: "Playing",
+          dropped: "Dropped",
+          want_to_play: "Want",
+        };
+        setStatus(statusMap[userGame.userGameData.status] || "Want");
+      }
+
+      // Set rating if available
+      if (userGame.userGameData?.rating) {
+        setRating(userGame.userGameData.rating);
+      }
+
+      // Set review if available
+      if (userGame.userGameData?.review) {
+        setReview(userGame.userGameData.review);
+      }
+
+      // Set endedAt if available
+      if (userGame.userGameData?.endedAt) {
+        // Convert from ISO string to date input format (YYYY-MM-DD)
+        const date = new Date(userGame.userGameData.endedAt);
+        setEndedAt(date.toISOString().split("T")[0]);
+      }
+    }
+  }, [game, mode]);
 
   const getRatingEmoji = useMemo(() => {
     if (rating === 0) return "🤔";
@@ -106,41 +142,60 @@ export default function CreateGameModal({
               | "dropped"
               | "want_to_play");
 
-      await addGameMutation.mutateAsync(
-        {
-          username: me?.data.username,
-          data: {
-            gameId: game.id,
-            status: dbStatus,
-            rating: rating || 0,
-            review: review || undefined,
-            platformId: game.platforms?.[0]?.id || 1, // Use first platform as default or fallback to 1
-            endedAt: endedAt ? new Date(endedAt).toISOString() : undefined,
-          },
-        },
-        {
-          onSuccess: () => {
-            queryClient.invalidateQueries({
-              queryKey: getGetApiUserByUsernameQueryKey(me?.data.username),
-            });
-            queryClient.invalidateQueries({
-              queryKey: getGetApiUserByUsernameGamesQueryKey(me?.data.username),
-            });
-            queryClient.invalidateQueries({
-              queryKey: getGetApiMeQueryKey(),
-            });
+      const invalidateQueries = () => {
+        queryClient.invalidateQueries({
+          queryKey: getGetApiUserByUsernameQueryKey(me?.data.username),
+        });
+        queryClient.invalidateQueries({
+          queryKey: getGetApiUserByUsernameGamesQueryKey(me?.data.username),
+        });
+        queryClient.invalidateQueries({
+          queryKey: getGetApiMeQueryKey(),
+        });
+        onSuccess();
+      };
 
-            onSuccess();
+      if (mode === "add") {
+        await addGameMutation.mutateAsync(
+          {
+            username: me?.data.username,
+            data: {
+              gameId: game.id,
+              status: dbStatus,
+              rating: rating || 0,
+              review: review || undefined,
+              platformId: game.platforms?.[0]?.id || 1,
+              endedAt: endedAt ? new Date(endedAt).toISOString() : undefined,
+            },
           },
-        }
-      );
+          {
+            onSuccess: invalidateQueries,
+          }
+        );
+      } else {
+        await updateGameMutation.mutateAsync(
+          {
+            username: me?.data.username,
+            id: game.id,
+            data: {
+              status: dbStatus,
+              rating: rating || 0,
+              review: review || undefined,
+              endedAt: endedAt ? new Date(endedAt).toISOString() : undefined,
+            },
+          },
+          {
+            onSuccess: invalidateQueries,
+          }
+        );
+      }
     } catch (error) {
-      console.error("Error saving game:", error);
+      console.error(`Error ${mode === "add" ? "saving" : "updating"} game:`, error);
       // TODO: Show error toast
     }
   };
 
-  const modalContent = (
+  return (
     <div className="space-y-6">
       {/* Game Header */}
       <div className="flex items-start gap-4 p-4 bg-gradient-to-r from-playdamnit-purple/10 to-playdamnit-cyan/10 rounded-lg border border-playdamnit-purple/20">
@@ -312,7 +367,7 @@ export default function CreateGameModal({
           ) : (
             <Button
               variant="outline"
-              onClick={onClose}
+              onClick={onCancel}
               className="flex-1 border-playdamnit-purple/30 text-playdamnit-light hover:bg-playdamnit-purple/10"
               disabled={isSubmitting}
             >
@@ -327,32 +382,14 @@ export default function CreateGameModal({
             {isSubmitting ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Adding...
+                {mode === "add" ? "Adding..." : "Updating..."}
               </>
             ) : (
-              "Add to Library"
+              mode === "add" ? "Add to Library" : "Update Game"
             )}
           </Button>
         </div>
       </div>
     </div>
   );
-
-  if (isEmbedded) {
-    return modalContent;
-  }
-
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-playdamnit-dark border-playdamnit-purple/30 text-playdamnit-light max-w-lg max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-playdamnit-light flex items-center gap-2">
-            <Star className="w-5 h-5 text-playdamnit-cyan" />
-            Add Game to Library
-          </DialogTitle>
-        </DialogHeader>
-        {modalContent}
-      </DialogContent>
-    </Dialog>
-  );
-}
+} 

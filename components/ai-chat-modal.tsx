@@ -13,7 +13,7 @@ import {
 import { useChat } from "@ai-sdk/react";
 import GameResult from "./chat/GameResult";
 import GameResultsList from "./chat/GameResultsList";
-import { GameSearchResult } from "@/utils/types/game";
+import { Game } from "@playdamnit/api-client";
 
 interface AIChatModalProps {
   isOpen: boolean;
@@ -40,7 +40,7 @@ export default function AIChatModal({ isOpen, onClose }: AIChatModalProps) {
     }
   }, [messages]);
 
-  const handleGameSelection = (messageId: string, game: GameSearchResult) => {
+  const handleGameSelection = (messageId: string, game: Game) => {
     // TODO: add additional logic here
     console.log("Selected game:", game);
   };
